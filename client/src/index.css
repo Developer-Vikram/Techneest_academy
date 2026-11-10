@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.25s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.25s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.2s ease-out;
+}
+
+@keyframes watermarkMove {
+  0% {
+    transform: translate(-100%, -100%);
+  }
+  100% {
+    transform: translate(100vw, 100vh);
+  }
+}
+
+.animate-watermark {
+  animation: watermarkMove 15s linear infinite;
+}
+
+
+/* Techneest Academy blue/cyan visual theme layer (ported from the reference theme).
+   Intentionally limited to colors, glow, transitions and hover feedback;
+   no margin, padding, width, height, grid or flex rules are changed. */
+:root {
+  --techneest-primary: #0072FF;
+  --techneest-primary-dark: #0052CC;
+  --techneest-cyan: #00C6FF;
+  --techneest-soft: #EFF6FF;
+}
+
+body {
+  background-color: #ffffff;
+}
+
+/* Subtle ambient blue/cyan glow, matching the reference site's visual language. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 4% 8%, rgba(0, 114, 255, 0.045), transparent 28%),
+    radial-gradient(circle at 96% 88%, rgba(0, 198, 255, 0.045), transparent 30%);
+}
+
+/* Consistent polished interaction feedback without changing element dimensions. */
+a, button, [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+  transition-property: color, background-color, border-color, box-shadow, filter, transform;
+  transition-duration: 250ms;
+  transition-timing-function: ease;
+}
+
+button:not(:disabled):hover {
+  filter: brightness(1.035);
+}
+
+button:focus-visible, a:focus-visible, [role="button"]:focus-visible {
+  outline: 2px solid rgba(0, 114, 255, 0.55);
+  outline-offset: 3px;
+}
+
+/* Blue/cyan hover glow for existing card-like interactive surfaces. */
+.group:hover {
+  --tw-shadow-color: rgba(0, 114, 255, 0.12);
+}

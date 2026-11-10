@@ -1,0 +1,333 @@
+const Razorpay = require("razorpay");
+const crypto = require("crypto");
+const bcrypt = require("bcrypt");
+
+const User = require("../models/UserModel");
+const TempUser = require("../models/TempUser");
+const Course = require("../models/Course");
+const CoursePurchase = require("../models/coursePurchaseModel");
+
+const generateRandomPassword = require("../utils/generatePassword");
+const { sendLoginCredentials } = require("../utils/emailService");
+const createToken = require("../utils/createToken");
+const EmailQueue = require("../models/EmailQueue");
+
+
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
+
+const generateNumericReferralCode = async () => {
+  let code;
+  let exists = true;
+
+  while (exists) {
+    code = Math.floor(10000000 + Math.random() * 90000000).toString();
+    exists = await User.findOne({ referral_code: code });
+  }
+  return code;
+};
+
+
+const normalizeEmail = (email) =>
+  email ? email.trim().toLowerCase() : null;
+
+
+exports.createOrder = async (req, res) => {
+  try {
+    let { amount, email, phone } = req.body;
+
+    amount = Number(amount);
+    if (!amount || isNaN(amount) || amount <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Valid amount required",
+      });
+    }
+
+    email = normalizeEmail(email);
+    if (!email || !phone) {
+      return res.status(400).json({
+        success: false,
+        message: "Email & phone required",
+      });
+    }
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      let tempUser = await TempUser.findOne({ email });
+
+      if (!tempUser) {
+        const plainPassword = generateRandomPassword(8);
+        const hashedPassword = await bcrypt.hash(plainPassword, 10);
+
+        tempUser = await TempUser.create({
+          firstname: email.split("@")[0],
+          email,
+          mobile: phone,
+          password: hashedPassword,
+          plain_password: plainPassword,
+        });
+      }
+
+      // TEMP USER TOKEN
+      const token = createToken({
+        id: tempUser._id,
+        role: "user",
+      });
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true, // HTTPS required
+        sameSite: "None", // 🔥 MUST
+        domain: ".maxifyacademy.com", // 🔥 VERY IMPORTANT
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+    } else {
+      // REAL USER TOKEN
+      const token = createToken({
+        id: user._id,
+        role: user.role,
+      });
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+    }
+
+    const order = await razorpay.orders.create({
+      amount: Math.round(amount * 100),
+      currency: "INR",
+      receipt: `rcpt_${Date.now()}`,
+    });
+
+    return res.status(200).json({
+      success: true,
+      key: process.env.RAZORPAY_KEY_ID,
+      order_id: order.id,
+      amount: order.amount,
+      currency: order.currency,
+    });
+
+  } catch (error) {
+    console.error("CREATE ORDER ERROR:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Order creation failed",
+    });
+  }
+};
+
+/* ===================================================
+   2️⃣ VERIFY PAYMENT
+=================================================== */
+
+exports.verifyPayment = async (req, res) => {
+  try {
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+    } = req.body;
+
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      return res.status(400).json({
+        success: false,
+        message: "Incomplete payment data",
+      });
+    }
+
+    const sign = `${razorpay_order_id}|${razorpay_payment_id}`;
+
+    const expectedSign = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(sign)
+      .digest("hex");
+
+    if (expectedSign !== razorpay_signature) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid payment signature",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Payment verified successfully",
+    });
+
+  } catch (error) {
+    console.error("❌ Verify Payment Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Payment verification failed",
+    });
+  }
+};
+
+/* ===================================================
+   3️⃣ CREATE PURCHASE (Temp → Real Conversion)
+=================================================== */
+
+exports.createPurchase = async (req, res) => {
+  try {
+    const {
+      course_id,
+      email,
+      razorpay_payment_id,
+      razorpay_order_id,
+      razorpay_signature,
+      purchased_amount = 0,
+      coupon_amount = 0,
+    } = req.body;
+
+    if (
+      !course_id ||
+      !razorpay_payment_id ||
+      !razorpay_order_id ||
+      !razorpay_signature
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Incomplete payment data",
+      });
+    }
+
+    /* Verify Signature Again */
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
+
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(body)
+      .digest("hex");
+
+    if (expectedSignature !== razorpay_signature) {
+      return res.status(400).json({
+        success: false,
+        message: "Payment verification failed",
+      });
+    }
+
+    /* Prevent Duplicate Payment */
+    const existingPayment = await CoursePurchase.findOne({
+      payment_id: razorpay_payment_id,
+    });
+
+    if (existingPayment) {
+      return res.status(200).json({
+        success: true,
+        message: "Payment already processed",
+      });
+    }
+
+    /* Check Course */
+    const course = await Course.findById(course_id);
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found",
+      });
+    }
+
+    const normalizedEmail = normalizeEmail(email);
+    let user = await User.findOne({ email: normalizedEmail });
+
+    /* Convert Temp → Real */
+    if (!user) {
+      const tempUser = await TempUser.findOne({ email: normalizedEmail });
+
+      if (!tempUser) {
+        return res.status(404).json({
+          success: false,
+          message: "Temp user not found",
+        });
+      }
+
+      // ✅ Generate referral code
+      const referral_code = await generateNumericReferralCode();
+
+      // ✅ Generate referral link
+      const referral_link = `https://maxifyacademy.com/r?ref=${referral_code}`;
+
+      // ✅ Create user
+      user = await User.create({
+        firstname: tempUser.firstname,
+        lastname: tempUser.lastname,
+        email: tempUser.email,
+        mobile: tempUser.mobile,
+        password: tempUser.password,
+        role: "user",
+        referral_code,
+        referral_link, // 🔥 FIXED
+        is_verified: true,
+      });
+
+      // ✅ Send email (non-blocking best practice)
+      await EmailQueue.create({
+        email: user.email,
+        password: tempUser.plain_password,
+        status: "pending",
+      });
+      // ✅ Delete temp user
+      await TempUser.deleteOne({ _id: tempUser._id });
+    }
+
+    /* Prevent Duplicate Course */
+    const alreadyPurchased = await CoursePurchase.findOne({
+      user_id: user._id,
+      course_id,
+    });
+
+    if (alreadyPurchased) {
+      return res.status(200).json({
+        success: true,
+        message: "You have already purchased this course",
+        alreadyPurchased: true,
+      });
+    }
+    /* Create Purchase */
+    const purchase = await CoursePurchase.create({
+      user_id: user._id,
+      course_id,
+      email: user.email,
+      enrolled: true,
+      purchased_amount: Number(purchased_amount),
+      coupon_amount: Number(coupon_amount),
+      payment_gateway: "razorpay",
+      payment_id: razorpay_payment_id,
+      order_id: razorpay_order_id,
+      payment_status: "paid",
+    });
+
+    /* ISSUE REAL USER TOKEN AFTER PURCHASE */
+    const token = createToken({
+      id: user._id,
+      role: user.role,
+    });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Course purchased successfully",
+      purchase,
+    });
+
+  } catch (error) {
+    console.error("CREATE PURCHASE ERROR:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Purchase failed",
+    });
+  }
+};
