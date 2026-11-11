@@ -14,7 +14,7 @@ const uploadToImgBB = async (fileBuffer) => {
   const upload = await axios.post(
     `https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`,
     formData,
-    { headers: formData.getHeaders() }
+    { headers: formData.getHeaders() },
   );
 
   return upload.data.data.url;
@@ -45,13 +45,13 @@ exports.createBlog = async (req, res) => {
     await sendToSubscribers({
       subject: "New Blog Published!",
       message: `
-        A new blog has been published on Maxify Academy.<br><br>
+        A new blog has been published on Techneest Academy.<br><br>
         <strong>${title}</strong><br><br>
         <a href="${process.env.FRONTEND_URL}/blog/${blog._id}" 
            style="background:#003366;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;">
            Read Now
         </a>
-      `
+      `,
     });
 
     res.status(201).json({ message: "Blog created successfully", blog });
@@ -59,7 +59,6 @@ exports.createBlog = async (req, res) => {
     res.status(500).json({ message: "Error creating blog", error });
   }
 };
-
 
 // ================================
 // GET ALL BLOGS

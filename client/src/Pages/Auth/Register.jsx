@@ -6,7 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerUser, verifyOTP, googleLogin } from "../../redux/slices/authSlice";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import UserLayout from "../../Layouts/UserLayout";
-import { Mail, CheckCircle, AlertCircle, Star, Rocket, Users, Award, TrendingUp, BadgeCheck, Zap } from "lucide-react";
+import {
+  AlertCircle,
+  Check,
+  CheckCircle,
+  Mail,
+  UserPlus,
+} from "lucide-react";
+import { AUTH } from "../../Data/content";
+import { AUTH_IMAGES } from "../../Data/images";
 
 const Register = () => {
   useEffect(() => {
@@ -205,393 +213,446 @@ const Register = () => {
 
   /* ================= UI ================= */
   return (
-    <>
-      <UserLayout>
-        <main className="min-h-screen bg-gradient-to-br from-white via-blue-100 to-indigo-200 relative overflow-hidden">
-          {/* Background Glow - Same as HeroSection */}
-          <div className="absolute top-0 left-0 w-80 h-80 bg-purple-200/30 blur-3xl rounded-full" />
-          <div className="absolute bottom-0 right-0 w-80 h-80 bg-blue-200/30 blur-3xl rounded-full" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-100/20 blur-3xl rounded-full" />
+    <UserLayout>
+      <main className="relative min-h-[calc(100vh-5rem)] overflow-hidden bg-navy">
+        {/* ========================================= */}
+        {/* FULL-SCREEN BACKGROUND IMAGE + OVERLAY */}
+        {/* ========================================= */}
+        <img
+          src={AUTH_IMAGES.register}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover"
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-br from-navy via-navy/90 to-iris/60"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-32 top-1/4 h-96 w-96 rounded-full bg-brand/25 blur-[110px]"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-32 bottom-0 h-96 w-96 rounded-full bg-aqua/15 blur-[110px]"
+        />
 
-          <div className="relative z-10 min-h-screen grid lg:grid-cols-2">
-            {/* LEFT SIDE - Normal White Background */}
-            <div className="hidden lg:flex flex-col justify-center bg-gradient-to-r from-blue-100 to-indigo-100 text-gray-900 px-16 xl:px-24 relative overflow-hidden">
-              <div className="relative z-10 max-w-xl">
-                <div className="inline-flex items-center gap-2 bg-purple-50 px-4 py-2 rounded-full mb-6 border border-purple-100">
-                  <Zap size={14} className="text-purple-600" />
-                  <span className="text-xs font-semibold uppercase tracking-wide text-purple-700">
-                    Join Techneest Academy
-                  </span>
-                </div>
+        {/* ========================================= */}
+        {/* CENTERED GLASS CARD */}
+        {/* ========================================= */}
+        <div className="relative z-10 flex min-h-[calc(100vh-5rem)] items-center justify-center px-4 py-12">
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="w-full max-w-2xl"
+          >
+            <div className="glass rounded-3xl p-6 shadow-2xl sm:p-8 md:p-10">
+              {/* Logo */}
+              <div className="mb-6 text-center">
+                <img
+                  src="/techneest-logo-dark.png"
+                  alt="Techneest Academy"
+                  className="mx-auto h-12"
+                />
+              </div>
 
-                <h1 className="text-5xl font-bold leading-tight mb-6 text-gray-900">
-                  Start Learning
-                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-[#00C6FF]">
-                    High Income Skills
-                  </span>
+              {/* Heading */}
+              <div className="mb-7 text-center">
+                <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-gradient text-white shadow-lg shadow-brand/40">
+                  <UserPlus size={22} aria-hidden="true" />
+                </span>
+                <h1 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                  {AUTH.register.formTitle}
                 </h1>
-
-                <p className="text-gray-600 text-lg leading-relaxed mb-10">
-                  Build your future with premium courses, expert mentorship,
-                  practical projects and real career opportunities.
+                <p className="mt-2 text-sm text-white/70">
+                  {AUTH.register.formSubtitle}
                 </p>
 
-                {/* Stats Grid */}
-                <div className="grid grid-cols-2 gap-5 mb-8">
-                  <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5">
-                    <div className="flex items-center gap-2 text-3xl font-bold mb-1 text-purple-600">
-                      2500+ <Users size={24} />
-                    </div>
-                    <p className="text-gray-500 text-sm">Students Enrolled</p>
-                  </div>
-
-                  <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5">
-                    <div className="flex items-center gap-2 text-3xl font-bold mb-1 text-purple-600">
-                      92% <Rocket size={24} />
-                    </div>
-                    <p className="text-gray-500 text-sm">Success Rate</p>
-                  </div>
-                </div>
-
-                {/* Trust Badges */}
-                <div className="flex flex-wrap gap-3">
-                  {[
-                    { icon: Award, text: "Certified Courses", color: "text-purple-600" },
-                    { icon: BadgeCheck, text: "Expert Mentors", color: "text-green-600" },
-                    { icon: TrendingUp, text: "Career Growth", color: "text-blue-600" },
-                  ].map((badge, idx) => (
-                    <div key={idx} className="flex items-center gap-2 bg-gray-50 rounded-full px-3 py-1.5 border border-gray-100">
-                      <badge.icon size={14} className={badge.color} />
-                      <span className="text-xs text-gray-600">{badge.text}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* RIGHT SIDE - Gradient Background (moved from left) */}
-            <div className="flex items-center justify-center px-1 py-10 bg-white">
-              <div className="w-full max-w-2xl">
-                {/* Mobile Logo */}
-                <div className="lg:hidden text-center mb-8">
-                  <img
-                    src="/techneest-logo.png"
-                    alt="Techneest Academy Logo"
-                    className="h-14 mx-auto"
-                  />
-                </div>
-
-                {/* Card */}
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6 }}
-                  className="bg-white/95 backdrop-blur-2xl rounded-[36px] shadow-[0_20px_60px_rgba(0,0,0,0.2)] p-6 sm:p-8 md:p-10"
-                >
-                  {/* Desktop Logo */}
-                  <div className="hidden lg:block text-center mb-6">
-                    <img
-                      src="/techneest-logo.png"
-                      alt="Techneest Academy Logo"
-                      className="h-14 mx-auto"
-                    />
-                  </div>
-
-                  {/* Heading */}
-                  <div className="text-center mb-8">
-                    <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
-                      Create Account
-                    </h2>
-                    <p className="text-gray-600 leading-relaxed">
-                      Start your journey and access premium learning resources
-                    </p>
-                  </div>
-
-                  {/* Google Button */}
-                  <button
-                    type="button"
-                    onClick={handleGoogleRegister}
-                    className="w-full h-14 rounded-2xl border border-gray-300 bg-white hover:bg-gray-50 hover:scale-[1.01] hover:shadow-md text-gray-700 font-semibold transition-all duration-300 flex items-center justify-center gap-3 mb-6"
-                  >
-                    <FcGoogle size={22} />
-                    Continue with Google
-                  </button>
-
-                  {/* Divider */}
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="flex-1 h-px bg-gray-200" />
-                    <span className="text-sm text-gray-500">OR</span>
-                    <div className="flex-1 h-px bg-gray-200" />
-                  </div>
-
-                  {/* Form */}
-                  <form onSubmit={handleSubmit} className="space-y-5">
-                    {/* Name Fields */}
-                    <div className="grid sm:grid-cols-2 gap-5">
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                          First Name
-                        </label>
-                        <input
-                          name="firstname"
-                          placeholder="Enter first name"
-                          onChange={handleChange}
-                          className={`input ${errors.firstname && "border-red-500"}`}
-                        />
-                        {errors.firstname && <p className="error">{errors.firstname}</p>}
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                          Last Name
-                        </label>
-                        <input
-                          name="lastname"
-                          placeholder="Enter last name"
-                          onChange={handleChange}
-                          className={`input ${errors.lastname && "border-red-500"}`}
-                        />
-                        {errors.lastname && <p className="error">{errors.lastname}</p>}
-                      </div>
-                    </div>
-
-                    {/* Email & Mobile */}
-                    <div className="grid sm:grid-cols-2 gap-5">
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                          Email Address
-                        </label>
-                        <input
-                          type="email"
-                          name="email"
-                          placeholder="Enter email"
-                          onChange={handleChange}
-                          className={`input ${errors.email && "border-red-500"}`}
-                        />
-                        {errors.email && <p className="error">{errors.email}</p>}
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                          Mobile Number
-                        </label>
-                        <input
-                          name="mobile"
-                          value={formData.mobile}
-                          placeholder="10 digit mobile"
-                          onChange={(e) =>
-                            handleChange({
-                              target: {
-                                name: "mobile",
-                                value: e.target.value.replace(/\D/g, ""),
-                              },
-                            })
-                          }
-                          maxLength="10"
-                          className={`input ${errors.mobile && "border-red-500"}`}
-                        />
-                        {errors.mobile && <p className="error">{errors.mobile}</p>}
-                      </div>
-                    </div>
-
-                    {/* Password Fields */}
-                    <div className="grid sm:grid-cols-2 gap-5">
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                          Password
-                        </label>
-                        <div className="relative">
-                          <input
-                            type={showPassword.password ? "text" : "password"}
-                            name="password"
-                            placeholder="Enter password"
-                            onChange={handleChange}
-                            className={`input pr-12 ${errors.password && "border-red-500"}`}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => togglePasswordVisibility("password")}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-purple-600 transition-colors"
-                          >
-                            {showPassword.password ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
-                          </button>
-                        </div>
-                        {errors.password && <p className="error">{errors.password}</p>}
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                          Confirm Password
-                        </label>
-                        <div className="relative">
-                          <input
-                            type={showPassword.confirm ? "text" : "password"}
-                            name="password_confirmation"
-                            placeholder="Confirm password"
-                            onChange={handleChange}
-                            className={`input pr-12 ${errors.password_confirmation && "border-red-500"}`}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => togglePasswordVisibility("confirm")}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-purple-600 transition-colors"
-                          >
-                            {showPassword.confirm ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
-                          </button>
-                        </div>
-                        {errors.password_confirmation && <p className="error">{errors.password_confirmation}</p>}
-                      </div>
-                    </div>
-
-                    {/* Terms */}
-                    <label className="flex items-start gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        name="agree"
-                        onChange={handleChange}
-                        className="mt-1 accent-purple-600"
-                      />
-                      <span className="text-sm text-gray-600 leading-relaxed">
-                        I agree to the
-                        <span className="font-semibold text-purple-600"> Terms & Conditions</span>
+                {/* Benefit highlights */}
+                <ul className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+                  {AUTH.register.benefits.map((benefit) => (
+                    <li
+                      key={benefit}
+                      className="flex items-center gap-2 text-xs font-medium text-white/80"
+                    >
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-gradient text-white">
+                        <Check size={11} aria-hidden="true" />
                       </span>
-                    </label>
-                    {errors.agree && <p className="error">{errors.agree}</p>}
-
-                    {/* OTP Section */}
-                    <AnimatePresence mode="wait">
-                      {!showOtpInput ? (
-                        <motion.button
-                          key="register-btn"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          disabled={loading}
-                          className="w-full h-14 rounded-2xl bg-gradient-to-r from-purple-600 to-[#00C6FF] text-white font-semibold hover:scale-[1.01] hover:shadow-xl transition-all duration-300 disabled:opacity-50"
-                        >
-                          {loading ? "Please wait..." : "Create Your Account"}
-                        </motion.button>
-                      ) : (
-                        <motion.div
-                          key="otp-section"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          className="space-y-4"
-                        >
-                          <motion.div
-                            initial={{ scale: 0.95, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-4 flex items-center gap-3"
-                          >
-                            <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                              <Mail size={20} className="text-green-600" />
-                            </div>
-                            <div className="flex-1">
-                              <p className="font-semibold text-green-800 text-sm">OTP Sent Successfully!</p>
-                              <p className="text-green-600 text-xs mt-0.5">
-                                We've sent a 6-digit code to{" "}
-                                <span className="font-medium">{formData.email}</span>
-                              </p>
-                            </div>
-                            <CheckCircle size={18} className="text-green-500" />
-                          </motion.div>
-
-                          <div>
-                            <input
-                              value={otp}
-                              onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                              maxLength="6"
-                              placeholder="Enter 6 Digit OTP"
-                              className="input text-center tracking-[0.4em] text-lg font-semibold"
-                            />
-                            {otpError && (
-                              <p className="error flex items-center gap-1 mt-2">
-                                <AlertCircle size={12} />
-                                {otpError}
-                              </p>
-                            )}
-                          </div>
-
-                          <div className="text-center">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setOtp("");
-                                setOtpError("");
-                                dispatch(
-                                  registerUser({
-                                    firstname: formData.firstname,
-                                    lastname: formData.lastname,
-                                    email: formData.email,
-                                    mobile: Number(formData.mobile),
-                                    dial_code: formData.dialCode,
-                                    password: formData.password,
-                                    i_agree: true,
-                                    referral_code: formData.referral_code,
-                                  })
-                                );
-                              }}
-                              className="text-sm text-purple-600 font-semibold hover:underline"
-                            >
-                              Didn't receive OTP? Resend
-                            </button>
-                          </div>
-
-                          <button
-                            type="button"
-                            onClick={verifyOtpFromBackend}
-                            className="w-full h-14 rounded-2xl bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold hover:scale-[1.01] transition-all duration-300"
-                          >
-                            Verify OTP
-                          </button>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </form>
-
-                  {/* Login Link */}
-                  <p className="text-center text-sm text-gray-600 mt-8">
-                    Already have an account?{" "}
-                    <Link to="/login" className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-[#00C6FF] hover:underline">
-                      Login
-                    </Link>
-                  </p>
-                </motion.div>
+                      {benefit}
+                    </li>
+                  ))}
+                </ul>
               </div>
+
+              {/* Google Button */}
+              <button
+                type="button"
+                onClick={handleGoogleRegister}
+                className="mb-5 flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-white/20 bg-white/95 text-sm font-semibold text-navy transition-all duration-300 hover:bg-white hover:shadow-lg"
+              >
+                <FcGoogle size={20} aria-hidden="true" />
+                Continue with Google
+              </button>
+
+              {/* Divider */}
+              <div className="mb-5 flex items-center gap-4">
+                <div className="h-px flex-1 bg-white/20" aria-hidden="true" />
+                <span className="text-xs font-semibold uppercase tracking-widest text-white/50">
+                  or
+                </span>
+                <div className="h-px flex-1 bg-white/20" aria-hidden="true" />
+              </div>
+
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+                {/* live region for screen readers */}
+                <div aria-live="polite" className="sr-only">
+                  {Object.values(errors).filter(Boolean).join(". ")}
+                  {otpError}
+                </div>
+
+                {/* Name Fields */}
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="register-firstname"
+                      className="mb-2 block text-xs font-bold uppercase tracking-widest text-white/70"
+                    >
+                      First name
+                    </label>
+                    <input
+                      id="register-firstname"
+                      name="firstname"
+                      placeholder="First name"
+                      onChange={handleChange}
+                      autoComplete="given-name"
+                      aria-invalid={!!errors.firstname}
+                      className={`glass-input ${errors.firstname ? "input-error" : ""}`}
+                    />
+                    {errors.firstname && <p className="glass-error">{errors.firstname}</p>}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="register-lastname"
+                      className="mb-2 block text-xs font-bold uppercase tracking-widest text-white/70"
+                    >
+                      Last name
+                    </label>
+                    <input
+                      id="register-lastname"
+                      name="lastname"
+                      placeholder="Last name"
+                      onChange={handleChange}
+                      autoComplete="family-name"
+                      aria-invalid={!!errors.lastname}
+                      className={`glass-input ${errors.lastname ? "input-error" : ""}`}
+                    />
+                    {errors.lastname && <p className="glass-error">{errors.lastname}</p>}
+                  </div>
+                </div>
+
+                {/* Email & Mobile */}
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="register-email"
+                      className="mb-2 block text-xs font-bold uppercase tracking-widest text-white/70"
+                    >
+                      Email address
+                    </label>
+                    <input
+                      id="register-email"
+                      type="email"
+                      name="email"
+                      placeholder="you@example.com"
+                      onChange={handleChange}
+                      autoComplete="email"
+                      aria-invalid={!!errors.email}
+                      className={`glass-input ${errors.email ? "input-error" : ""}`}
+                    />
+                    {errors.email && <p className="glass-error">{errors.email}</p>}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="register-mobile"
+                      className="mb-2 block text-xs font-bold uppercase tracking-widest text-white/70"
+                    >
+                      Mobile number
+                    </label>
+                    <input
+                      id="register-mobile"
+                      name="mobile"
+                      value={formData.mobile}
+                      placeholder="10-digit mobile"
+                      onChange={(e) =>
+                        handleChange({
+                          target: {
+                            name: "mobile",
+                            value: e.target.value.replace(/\D/g, ""),
+                          },
+                        })
+                      }
+                      maxLength="10"
+                      inputMode="numeric"
+                      autoComplete="tel"
+                      aria-invalid={!!errors.mobile}
+                      className={`glass-input ${errors.mobile ? "input-error" : ""}`}
+                    />
+                    {errors.mobile && <p className="glass-error">{errors.mobile}</p>}
+                  </div>
+                </div>
+
+                {/* Password Fields */}
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="register-password"
+                      className="mb-2 block text-xs font-bold uppercase tracking-widest text-white/70"
+                    >
+                      Password
+                    </label>
+                    <div className="relative">
+                      <input
+                        id="register-password"
+                        type={showPassword.password ? "text" : "password"}
+                        name="password"
+                        placeholder="Create a password"
+                        onChange={handleChange}
+                        autoComplete="new-password"
+                        aria-invalid={!!errors.password}
+                        className={`glass-input pr-12 ${errors.password ? "input-error" : ""}`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => togglePasswordVisibility("password")}
+                        aria-label={showPassword.password ? "Hide password" : "Show password"}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 transition-colors hover:text-aqua"
+                      >
+                        {showPassword.password ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                      </button>
+                    </div>
+                    {errors.password && <p className="glass-error">{errors.password}</p>}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="register-password-confirmation"
+                      className="mb-2 block text-xs font-bold uppercase tracking-widest text-white/70"
+                    >
+                      Confirm password
+                    </label>
+                    <div className="relative">
+                      <input
+                        id="register-password-confirmation"
+                        type={showPassword.confirm ? "text" : "password"}
+                        name="password_confirmation"
+                        placeholder="Repeat password"
+                        onChange={handleChange}
+                        autoComplete="new-password"
+                        aria-invalid={!!errors.password_confirmation}
+                        className={`glass-input pr-12 ${errors.password_confirmation ? "input-error" : ""}`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => togglePasswordVisibility("confirm")}
+                        aria-label={showPassword.confirm ? "Hide password" : "Show password"}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 transition-colors hover:text-aqua"
+                      >
+                        {showPassword.confirm ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                      </button>
+                    </div>
+                    {errors.password_confirmation && <p className="glass-error">{errors.password_confirmation}</p>}
+                  </div>
+                </div>
+
+                {/* Terms */}
+                <div>
+                  <label
+                    htmlFor="register-agree"
+                    className="flex cursor-pointer items-start gap-3"
+                  >
+                    <input
+                      id="register-agree"
+                      type="checkbox"
+                      name="agree"
+                      onChange={handleChange}
+                      className="mt-1 h-4 w-4 accent-aqua"
+                    />
+                    <span className="text-sm leading-relaxed text-white/75">
+                      I agree to the{" "}
+                      <Link
+                        to="/terms-and-conditions"
+                        className="font-semibold text-aqua hover:underline"
+                      >
+                        Terms &amp; Conditions
+                      </Link>
+                    </span>
+                  </label>
+                  {errors.agree && <p className="glass-error">{errors.agree}</p>}
+                </div>
+
+                {/* OTP Section */}
+                <AnimatePresence mode="wait">
+                  {!showOtpInput ? (
+                    <motion.button
+                      key="register-btn"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      type="submit"
+                      disabled={loading}
+                      className="h-12 w-full rounded-xl bg-brand-gradient text-sm font-bold text-white shadow-lg shadow-brand/40 transition-all duration-300 hover:shadow-xl hover:shadow-iris/50 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {loading ? "Please wait…" : "Create my account"}
+                    </motion.button>
+                  ) : (
+                    <motion.div
+                      key="otp-section"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="space-y-4"
+                    >
+                      <motion.div
+                        initial={{ scale: 0.95, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        role="status"
+                        className="flex items-center gap-3 rounded-2xl border border-green-300/30 bg-green-400/15 p-4"
+                      >
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-400/25">
+                          <Mail size={20} className="text-green-200" aria-hidden="true" />
+                        </span>
+                        <span className="flex-1">
+                          <span className="block text-sm font-bold text-green-100">
+                            Check your inbox
+                          </span>
+                          <span className="mt-0.5 block text-xs text-green-200/80">
+                            We sent a 6-digit code to{" "}
+                            <span className="font-semibold">{formData.email}</span>
+                          </span>
+                        </span>
+                        <CheckCircle size={18} className="text-green-300" aria-hidden="true" />
+                      </motion.div>
+
+                      <div>
+                        <label htmlFor="register-otp" className="sr-only">
+                          One-time password
+                        </label>
+                        <input
+                          id="register-otp"
+                          value={otp}
+                          onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                          maxLength="6"
+                          placeholder="Enter 6-digit OTP"
+                          inputMode="numeric"
+                          className="glass-input text-center text-lg font-semibold tracking-[0.4em]"
+                        />
+                        {otpError && (
+                          <p className="glass-error mt-2 flex items-center gap-1">
+                            <AlertCircle size={12} aria-hidden="true" />
+                            {otpError}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="text-center">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setOtp("");
+                            setOtpError("");
+                            dispatch(
+                              registerUser({
+                                firstname: formData.firstname,
+                                lastname: formData.lastname,
+                                email: formData.email,
+                                mobile: Number(formData.mobile),
+                                dial_code: formData.dialCode,
+                                password: formData.password,
+                                i_agree: true,
+                                referral_code: formData.referral_code,
+                              })
+                            );
+                          }}
+                          className="text-sm font-semibold text-aqua transition-colors hover:text-white hover:underline"
+                        >
+                          Didn't receive the code? Resend
+                        </button>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={verifyOtpFromBackend}
+                        className="h-12 w-full rounded-xl bg-white text-sm font-bold text-navy transition-all duration-300 hover:bg-aqua hover:text-navy"
+                      >
+                        Verify OTP
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </form>
+
+              {/* Login Link */}
+              <p className="mt-6 text-center text-sm text-white/70">
+                Already registered?{" "}
+                <Link
+                  to="/login"
+                  className="font-bold text-aqua transition-colors hover:text-white hover:underline"
+                >
+                  Sign in
+                </Link>
+              </p>
             </div>
-          </div>
+          </motion.div>
+        </div>
 
-          <style>{`
-            .input {
-              width: 100%;
-              height: 56px;
-              padding: 0 18px;
-              border: 1px solid #e5e7eb;
-              border-radius: 18px;
-              background: rgba(255,255,255,0.9);
-              transition: all 0.3s ease;
-              outline: none;
-            }
+        <style>{`
+          .glass-input {
+            width: 100%;
+            height: 52px;
+            padding: 0 16px;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            font-size: 0.875rem;
+            color: #ffffff;
+            transition: all 0.25s ease;
+            outline: none;
+          }
 
-            .input:focus {
-              border-color: #8b5cf6;
-              box-shadow: 0 0 0 4px rgba(139,92,246,0.12);
-              background: white;
-            }
+          .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.45);
+          }
 
-            .error {
-              color: #dc2626;
-              font-size: 0.75rem;
-              margin-top: 6px;
-              display: flex;
-              align-items: center;
-              gap: 4px;
-            }
-          `}</style>
-        </main>
-      </UserLayout>
-    </>
+          .glass-input:focus {
+            border-color: #22D3EE;
+            box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.2);
+            background: rgba(255, 255, 255, 0.14);
+          }
+
+          .input-error {
+            border-color: #fca5a5;
+          }
+
+          .glass-error {
+            color: #fecaca;
+            font-size: 0.75rem;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+          }
+        `}</style>
+      </main>
+    </UserLayout>
   );
 };
 

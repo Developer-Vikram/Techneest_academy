@@ -38,7 +38,7 @@ exports.sendToSubscribers = async ({ subject, message, ctaText, ctaLink }) => {
       }
 
       <p style="font-size:13px;color:#94a3b8;margin-top:25px;">
-        You’re receiving this email because you subscribed to Maxify Academy.
+        You’re receiving this email because you subscribed to Techneest Academy.
       </p>
     `;
 
@@ -49,7 +49,6 @@ exports.sendToSubscribers = async ({ subject, message, ctaText, ctaLink }) => {
         message: enhancedMessage,
       });
     }
-
   } catch (err) {
     console.log("Subscriber Email Error:", err);
   }

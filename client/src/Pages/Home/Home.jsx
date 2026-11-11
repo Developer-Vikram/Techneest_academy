@@ -1,35 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { FaStar } from 'react-icons/fa';
+import React, { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
-import HeroSection from './components/HeroSection';
-import HomeAbout from './components/HomeAbout';
-import FeaturesSection from './components/FeaturedHome';
-import CourseCategories from './components/CourseCategories';
-import Courses from './components/Courses';
-import WhyChooseUs from './components/WhyChooseUs';
-import FunFact from './components/FunFact';
-import PartnerSection from './components/PartnerSection';
-import TestimonialSection from './components/Testmonial';
-import CallToActionSection from './components/CalltoAction';
 import UserLayout from '../../Layouts/UserLayout';
-import Blog from './components/Blog';
-import Skills from './components/Skills';
+import ScrollToTop from '../../Components/ScrollToTop';
+
+import HeroSection from './components/HeroSection';
+import FunFact from './components/FunFact';
+import WhyChooseUs from './components/WhyChooseUs';
+import Courses from './components/Courses';
 import Projects from './components/Projects';
-import CareerPaths from './components/CareerPaths';
-import Roadmap from './components/Roadmap';
+import CertificateSection from './components/CertificateSection';
 import Mentors from './components/Mentors';
+import InternshipPath from './components/InternshipPath';
+import Gallery from './components/Gallery';
+import TestimonialSection from './components/Testmonial';
 import FAQ from './components/FAQ';
 import FinalCTA from './components/FinalCTA';
-import TeamGallery from './components/TeamGallery';
-import TeamMomentsGallery from './components/TeamMomentsGallery';
-import CertificateSection from './components/CertificateSection';
-import ScrollToTop from '../../Components/ScrollToTop';
 
 const Home = () => {
 
   const navigate = useNavigate();
-  const [colorWords, setColorWords] = useState([]);
 
   /* ================= SCROLL FIX ================= */
   useEffect(() => {
@@ -54,49 +44,21 @@ const Home = () => {
     }
   }, [navigate]);
 
-  /* ================= STAR RATING ================= */
-  const StarRating = ({ rating }) => {
-    const stars = [];
-    const totalStars = 5;
-
-    for (let i = 1; i <= totalStars; i++) {
-      stars.push(
-        <FaStar
-          key={i}
-          className={`w-5 h-5 ${
-            i <= rating ? 'text-yellow-400' : 'text-gray-300'
-          }`}
-        />
-      );
-    }
-    return <div className="flex space-x-1">{stars}</div>;
-  };
-
   return (
     <UserLayout>
-      <main className="main-wrapper overflow-x-hidden">
+      <main className="main-wrapper overflow-x-hidden bg-canvas">
 
         <HeroSection />
-        <Skills />
-        {/* <HomeAbout /> */}
-        {/* <CourseCategories /> */}
-        {/* <FeaturesSection /> */}
+        <FunFact />
+        <WhyChooseUs />
         <Courses />
         <Projects />
         <CertificateSection />
-        <CareerPaths />
-        <Roadmap />
         <Mentors />
-        {/* <TeamGallery /> */}
-
-        <WhyChooseUs />
-        <TeamMomentsGallery />
-        {/* <FunFact /> */}
-        {/* <PartnerSection /> */}
+        <InternshipPath />
+        <Gallery />
         <TestimonialSection />
         <FAQ />
-        {/* <Blog /> */}
-        {/* <CallToActionSection /> */}
         <FinalCTA />
         <ScrollToTop />
 

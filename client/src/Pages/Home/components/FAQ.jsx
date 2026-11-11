@@ -2,13 +2,7 @@ import React, { useState } from "react"
 import {
     ChevronDown,
     HelpCircle,
-    MessageCircle,
-    Mail,
-    Phone,
-    Zap,
-    Shield,
     Clock,
-    Award,
     GraduationCap,
     Briefcase,
     Video,
@@ -17,7 +11,9 @@ import {
     ShieldCheck,
     AlarmClock,
     FileText,
-    Headphones
+    Zap,
+    Shield,
+    Users,
 } from "lucide-react"
 
 const FAQ = () => {
@@ -79,33 +75,32 @@ const FAQ = () => {
     }
 
     return (
-        <section className="w-full bg-gradient-to-b from-white to-gray-50 py-4 md:py-8">
-            <div className="max-w-[95rem] mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="w-full bg-white py-12 md:py-20">
+            <div className="mx-auto max-w-[95rem] px-4 sm:px-6 lg:px-8">
 
                 {/* Section Header */}
-                <div className="text-center max-w-3xl mx-auto">
-                    {/* Mini badge */}
-                    <div className="inline-flex items-center gap-2 bg-purple-50 px-3 py-1 rounded-full mb-4">
-                        <HelpCircle size={14} className="text-purple-600" />
-                        <span className="text-xs font-semibold text-purple-600 uppercase tracking-wide">HAVE QUESTIONS?</span>
-                    </div>
+                <div className="mx-auto max-w-3xl text-center">
+                    <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-soft px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-brand">
+                        <HelpCircle size={14} aria-hidden="true" />
+                        Have questions?
+                    </span>
 
-                    {/* Heading */}
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900">
-                        Frequently Asked{' '}
-                        <span className="bg-gradient-to-r from-purple-600 to-[#00C6FF] bg-clip-text text-transparent">
-                            Questions
-                        </span>
+                    <h2 className="text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-4xl md:text-5xl">
+                        Frequently asked{' '}
+                        <span className="text-gradient">questions</span>
                     </h2>
 
-                    <p className="mt-4 text-base md:text-lg text-gray-600">
-                        Find answers to the most common questions about courses, certifications, learning support, and your journey with Techneest Academy.
-                        <span className="block text-sm text-purple-600 font-semibold mt-1">Still Have Questions? Contact Our Support Team</span>
+                    <p className="mt-4 text-base leading-relaxed text-muted md:text-lg">
+                        Answers about courses, certification, mentorship and your
+                        journey with Techneest Academy.
+                        <span className="mt-1 block text-sm font-semibold text-brand">
+                            Still curious? The contact page is one click away.
+                        </span>
                     </p>
                 </div>
 
                 {/* FAQ Grid - Desktop */}
-                <div className="hidden md:grid md:grid-cols-2 gap-4 mt-12">
+                <div className="mt-12 hidden gap-4 md:grid md:grid-cols-2">
                     {faqs.map((faq, index) => {
                         const Icon = faq.icon
                         const isOpen = activeIndex === index
@@ -113,9 +108,18 @@ const FAQ = () => {
                         return (
                             <div
                                 key={index}
-                                className={`bg-white rounded-xl border transition-all duration-300 cursor-pointer ${isOpen
-                                    ? 'border-purple-200 shadow-lg'
-                                    : 'border-gray-200 hover:border-purple-200 hover:shadow-premium'
+                                role="button"
+                                tabIndex={0}
+                                aria-expanded={isOpen}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        e.preventDefault()
+                                        toggleFAQ(index)
+                                    }
+                                }}
+                                className={`cursor-pointer rounded-2xl border bg-white transition-all duration-300 ${isOpen
+                                    ? 'border-brand shadow-lift'
+                                    : 'border-line hover:border-softdeep hover:shadow-card'
                                     }`}
                                 onClick={() => toggleFAQ(index)}
                             >
@@ -123,31 +127,32 @@ const FAQ = () => {
                                     {/* Question */}
                                     <div className="flex items-start justify-between gap-3">
                                         <div className="flex-1">
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <div className="w-6 h-6 rounded-lg bg-purple-100 flex items-center justify-center">
-                                                    <Icon size={14} className="text-purple-600" />
-                                                </div>
-                                                <span className="text-xs font-medium text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">
+                                            <div className="mb-2 flex items-center gap-2">
+                                                <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-soft">
+                                                    <Icon size={14} className="text-brand" aria-hidden="true" />
+                                                </span>
+                                                <span className="rounded-full bg-canvas px-2 py-0.5 text-xs font-semibold text-muted">
                                                     {faq.category}
                                                 </span>
                                             </div>
-                                            <h3 className="text-base font-semibold text-gray-900 pr-4">
+                                            <h3 className="pr-4 text-base font-bold text-navy">
                                                 {faq.question}
                                             </h3>
                                         </div>
                                         <ChevronDown
                                             size={20}
-                                            className={`flex-shrink-0 transition-transform duration-300 mt-1 ${isOpen ? "rotate-180 text-purple-600" : "text-gray-400"
+                                            aria-hidden="true"
+                                            className={`mt-1 flex-shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180 text-brand" : "text-muted/50"
                                                 }`}
                                         />
                                     </div>
 
                                     {/* Answer */}
                                     <div
-                                        className={`overflow-hidden transition-all duration-300 ${isOpen ? "max-h-40 mt-3" : "max-h-0"
+                                        className={`overflow-hidden transition-all duration-300 ${isOpen ? "mt-3 max-h-40" : "max-h-0"
                                             }`}
                                     >
-                                        <p className="text-sm text-gray-600 leading-relaxed">
+                                        <p className="text-sm leading-relaxed text-muted">
                                             {faq.answer}
                                         </p>
                                     </div>
@@ -158,7 +163,7 @@ const FAQ = () => {
                 </div>
 
                 {/* FAQ List - Mobile (Vertical) */}
-                <div className="md:hidden mt-12 space-y-3">
+                <div className="mt-12 space-y-3 md:hidden">
                     {faqs.map((faq, index) => {
                         const Icon = faq.icon
                         const isOpen = activeIndex === index
@@ -166,38 +171,48 @@ const FAQ = () => {
                         return (
                             <div
                                 key={index}
-                                className="bg-white rounded-xl border border-gray-200 transition-all duration-300 cursor-pointer hover:border-purple-200"
+                                role="button"
+                                tabIndex={0}
+                                aria-expanded={isOpen}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        e.preventDefault()
+                                        toggleFAQ(index)
+                                    }
+                                }}
+                                className="cursor-pointer rounded-2xl border border-line bg-white transition-all duration-300 hover:border-softdeep"
                                 onClick={() => toggleFAQ(index)}
                             >
                                 <div className="p-4">
                                     {/* Question */}
                                     <div className="flex items-start justify-between gap-3">
                                         <div className="flex-1">
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <div className="w-5 h-5 rounded-lg bg-purple-100 flex items-center justify-center">
-                                                    <Icon size={12} className="text-purple-600" />
-                                                </div>
-                                                <span className="text-xs font-medium text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">
+                                            <div className="mb-1 flex items-center gap-2">
+                                                <span className="flex h-5 w-5 items-center justify-center rounded-lg bg-soft">
+                                                    <Icon size={12} className="text-brand" aria-hidden="true" />
+                                                </span>
+                                                <span className="rounded-full bg-canvas px-2 py-0.5 text-xs font-medium text-muted">
                                                     {faq.category}
                                                 </span>
                                             </div>
-                                            <h3 className="text-sm font-semibold text-gray-900 pr-4 leading-relaxed">
+                                            <h3 className="pr-4 text-sm font-bold leading-relaxed text-navy">
                                                 {faq.question}
                                             </h3>
                                         </div>
                                         <ChevronDown
                                             size={18}
-                                            className={`flex-shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180 text-purple-600" : "text-gray-400"
+                                            aria-hidden="true"
+                                            className={`flex-shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180 text-brand" : "text-muted/50"
                                                 }`}
                                         />
                                     </div>
 
                                     {/* Answer */}
                                     <div
-                                        className={`overflow-hidden transition-all duration-300 ${isOpen ? "max-h-32 mt-3" : "max-h-0"
+                                        className={`overflow-hidden transition-all duration-300 ${isOpen ? "mt-3 max-h-40" : "max-h-0"
                                             }`}
                                     >
-                                        <p className="text-xs text-gray-600 leading-relaxed">
+                                        <p className="text-xs leading-relaxed text-muted">
                                             {faq.answer}
                                         </p>
                                     </div>
@@ -208,66 +223,38 @@ const FAQ = () => {
                 </div>
 
                 {/* Quick Stats */}
-                <div className="mt-5 grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
 
-                    {/* Card 1 */}
-                    <div className="bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-premium transition-all duration-300 p-5 text-center hover:-translate-y-1">
-                        <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-100 rounded-xl mb-3">
-                            <Clock size={22} className="text-purple-600" />
-                        </div>
-
-                        <p className="text-base font-bold text-gray-900">
-                            24/7 Support
-                        </p>
-
-                        <p className="text-xs text-gray-500 mt-1">
-                            Always here to help
-                        </p>
+                    <div className="rounded-2xl border border-line bg-canvas p-5 text-center transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-card">
+                        <span className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-soft">
+                            <Clock size={22} className="text-brand" aria-hidden="true" />
+                        </span>
+                        <p className="text-base font-bold text-navy">24/7 Support</p>
+                        <p className="mt-1 text-xs text-muted">Always here to help</p>
                     </div>
 
-                    {/* Card 2 */}
-                    <div className="bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-premium transition-all duration-300 p-5 text-center hover:-translate-y-1">
-                        <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-xl mb-3">
-                            <Zap size={22} className="text-green-600" />
-                        </div>
-
-                        <p className="text-base font-bold text-gray-900">
-                            Fast Response
-                        </p>
-
-                        <p className="text-xs text-gray-500 mt-1">
-                            Within 2 hours
-                        </p>
+                    <div className="rounded-2xl border border-line bg-canvas p-5 text-center transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-card">
+                        <span className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-green-100">
+                            <Zap size={22} className="text-green-600" aria-hidden="true" />
+                        </span>
+                        <p className="text-base font-bold text-navy">Fast Response</p>
+                        <p className="mt-1 text-xs text-muted">Within 2 hours</p>
                     </div>
 
-                    {/* Card 3 */}
-                    <div className="bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-premium transition-all duration-300 p-5 text-center hover:-translate-y-1">
-                        <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-xl mb-3">
-                            <Shield size={22} className="text-blue-600" />
-                        </div>
-
-                        <p className="text-base font-bold text-gray-900">
-                            Secure Learning
-                        </p>
-
-                        <p className="text-xs text-gray-500 mt-1">
-                            100% safe platform
-                        </p>
+                    <div className="rounded-2xl border border-line bg-canvas p-5 text-center transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-card">
+                        <span className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-soft">
+                            <Shield size={22} className="text-iris" aria-hidden="true" />
+                        </span>
+                        <p className="text-base font-bold text-navy">Secure Learning</p>
+                        <p className="mt-1 text-xs text-muted">100% safe platform</p>
                     </div>
 
-                    {/* Card 4 */}
-                    <div className="bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-premium transition-all duration-300 p-5 text-center hover:-translate-y-1">
-                        <div className="inline-flex items-center justify-center w-12 h-12 bg-orange-100 rounded-xl mb-3">
-                            <Award size={22} className="text-orange-600" />
-                        </div>
-
-                        <p className="text-base font-bold text-gray-900">
-                            Trusted by 2500+
-                        </p>
-
-                        <p className="text-xs text-gray-500 mt-1">
-                            Students Across India
-                        </p>
+                    <div className="rounded-2xl border border-line bg-canvas p-5 text-center transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-card">
+                        <span className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-orange-50">
+                            <Users size={22} className="text-warm" aria-hidden="true" />
+                        </span>
+                        <p className="text-base font-bold text-navy">1525+ Students</p>
+                        <p className="mt-1 text-xs text-muted">Learning across India</p>
                     </div>
 
                 </div>

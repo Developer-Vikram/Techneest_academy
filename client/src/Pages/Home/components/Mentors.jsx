@@ -55,65 +55,111 @@ const Mentors = () => {
   ];
 
   return (
-    <section className="relative w-full bg-white py-14 md:py-20 overflow-hidden">
-      {/* Background: soft blobs + dotted pattern */}
+    <section
+      className="relative w-full overflow-hidden bg-canvas py-14 md:py-20"
+      aria-label="Mentors"
+    >
+      {/* Background: dotted pattern + brand glows */}
       <div
+        aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-[0.35]"
         style={{
-          backgroundImage: "radial-gradient(#e5e7eb 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(#E3E8F5 1px, transparent 1px)",
           backgroundSize: "22px 22px",
         }}
       ></div>
-      <div className="pointer-events-none absolute top-10 right-0 w-80 h-80 bg-cyan-200/50 rounded-full blur-3xl"></div>
-      <div className="pointer-events-none absolute bottom-0 left-0 w-80 h-80 bg-purple-200/50 rounded-full blur-3xl"></div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-0 top-10 h-80 w-80 rounded-full bg-aqua/20 blur-3xl"
+      ></div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 left-0 h-80 w-80 rounded-full bg-iris/15 blur-3xl"
+      ></div>
 
-      <div className="relative max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div className="relative mx-auto max-w-[100rem] px-4 sm:px-6 lg:px-8">
+        {/* SECTION INTRO — mentorship paragraph */}
+        <div className="mx-auto mb-12 max-w-3xl text-center md:mb-16">
+          <span className="inline-flex items-center gap-2 rounded-full bg-soft px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-brand">
+            <GraduationCap size={14} aria-hidden="true" />
+            Mentorship at Techneest
+          </span>
+          <h2 className="mt-5 text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-4xl md:text-5xl">
+            You never learn <span className="text-gradient">alone</span>
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-muted md:text-lg">
+            Videos can teach syntax; only a developer can teach judgement.
+            Techneest mentors review your code, run live doubt-solving sessions
+            and guide your internship work — the same professional feedback loop
+            real engineering teams run every day.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* IMAGE SIDE */}
-          <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[430px] px-3 sm:px-0">
-              {/* Dashed decorative ring */}
-              <div className="absolute -top-8 -right-8 w-44 h-44 rounded-full border-2 border-dashed border-purple-300/70"></div>
-              <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full border-2 border-dashed border-cyan-300/80"></div>
+          <div className="order-1 flex justify-center lg:order-2 lg:justify-end">
+            <div className="relative w-full max-w-[340px] px-3 sm:max-w-[400px] sm:px-0 lg:max-w-[430px]">
+              {/* Dashed decorative rings */}
+              <div
+                aria-hidden="true"
+                className="absolute -right-8 -top-8 h-44 w-44 rounded-full border-2 border-dashed border-softdeep"
+              ></div>
+              <div
+                aria-hidden="true"
+                className="absolute -bottom-8 -left-8 h-32 w-32 rounded-full border-2 border-dashed border-aqua/60"
+              ></div>
 
               {/* Tilted gradient backing */}
-              <div className="absolute inset-0 rotate-[5deg] scale-[0.97] rounded-[2rem] bg-gradient-to-br from-purple-600 to-[#00C6FF] opacity-90"></div>
-              <div className="absolute inset-0 -rotate-[3deg] scale-[0.97] rounded-[2rem] bg-white border border-gray-200 shadow-lg"></div>
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 rotate-[5deg] scale-[0.97] rounded-[2rem] bg-brand-gradient opacity-90"
+              ></div>
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 -rotate-[3deg] scale-[0.97] rounded-[2rem] border border-line bg-white shadow-lg"
+              ></div>
 
               {/* Photo card */}
-              <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden bg-gray-100 shadow-2xl ring-1 ring-black/5">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-soft shadow-2xl ring-1 ring-navy/5">
                 <img
                   src={mentor.image}
-                  alt={mentor.name}
-                  className="w-full h-full object-cover object-top"
+                  alt={`${mentor.name}, ${mentor.role} at ${mentor.company}`}
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                  className="h-full w-full object-cover object-top"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/10 to-transparent"></div>
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/10 to-transparent"
+                ></div>
 
-                {/* Rating pill (top right, inside photo) */}
-                <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-white/90 backdrop-blur-md rounded-full pl-2.5 pr-3 py-1.5 shadow-lg">
-                  <Star size={14} className="fill-yellow-400 text-yellow-400" />
-                  <span className="text-xs font-bold text-gray-900">
+                {/* Rating pill */}
+                <div className="absolute right-4 top-4 flex items-center gap-1.5 rounded-full bg-white/90 py-1.5 pl-2.5 pr-3 shadow-lg backdrop-blur-md">
+                  <Star size={14} className="fill-yellow-400 text-yellow-400" aria-hidden="true" />
+                  <span className="text-xs font-bold text-navy">
                     {mentor.rating}
                   </span>
-                  <span className="text-[10px] text-gray-500">Rating</span>
+                  <span className="text-[10px] text-muted">Rating</span>
                 </div>
 
                 {/* Bottom glass info bar */}
-                <div className="absolute bottom-3 left-3 right-3 bg-white/15 backdrop-blur-xl border border-white/25 rounded-2xl px-4 py-3">
+                <div className="glass absolute bottom-3 left-3 right-3 rounded-2xl px-4 py-3">
                   <div className="flex items-center gap-1.5">
-                    <h4 className="font-bold text-white text-base sm:text-lg">
+                    <h3 className="text-base font-bold text-white sm:text-lg">
                       {mentor.name}
-                    </h4>
-                    <BadgeCheck size={17} className="text-cyan-300" />
+                    </h3>
+                    <BadgeCheck size={17} className="text-aqua" aria-hidden="true" />
                   </div>
-                  <p className="text-xs text-white/80 mt-0.5">
+                  <p className="mt-0.5 text-xs text-white/80">
                     {mentor.role} · {mentor.company}
                   </p>
                   <div className="mt-2.5 flex items-center gap-3 text-[11px] text-white/90">
                     <span className="font-semibold">
                       {mentor.students} Students
                     </span>
-                    <span className="w-1 h-1 rounded-full bg-white/60"></span>
+                    <span aria-hidden="true" className="h-1 w-1 rounded-full bg-white/60"></span>
                     <span className="font-semibold">
                       {mentor.experience} Exp.
                     </span>
@@ -122,66 +168,51 @@ const Mentors = () => {
               </div>
 
               {/* Floating tech chips */}
-              <div className="absolute top-14 -left-2 sm:-left-8 flex items-center gap-2 bg-white rounded-xl shadow-xl border border-gray-100 px-3 py-2">
-                <span className="w-7 h-7 rounded-lg bg-cyan-50 flex items-center justify-center">
-                  <Code2 size={15} className="text-cyan-600" />
+              <div className="absolute -left-2 top-14 flex items-center gap-2 rounded-xl border border-line bg-white px-3 py-2 shadow-xl sm:-left-8">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-soft">
+                  <Code2 size={15} className="text-brand" aria-hidden="true" />
                 </span>
-                <span className="text-xs font-semibold text-gray-800">
-                  React.js
-                </span>
+                <span className="text-xs font-semibold text-navy">React.js</span>
               </div>
 
-              <div className="absolute top-1/2 -right-2 sm:-right-8 flex items-center gap-2 bg-white rounded-xl shadow-xl border border-gray-100 px-3 py-2">
-                <span className="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center">
-                  <Server size={15} className="text-green-600" />
+              <div className="absolute -right-2 top-1/2 flex items-center gap-2 rounded-xl border border-line bg-white px-3 py-2 shadow-xl sm:-right-8">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-green-50">
+                  <Server size={15} className="text-green-600" aria-hidden="true" />
                 </span>
-                <span className="text-xs font-semibold text-gray-800">
-                  Node.js
-                </span>
+                <span className="text-xs font-semibold text-navy">Node.js</span>
               </div>
 
-              <div className="absolute bottom-36 -left-2 sm:-left-8 flex items-center gap-2 bg-white rounded-xl shadow-xl border border-gray-100 px-3 py-2">
-                <span className="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center">
-                  <Database size={15} className="text-purple-600" />
+              <div className="absolute -left-2 bottom-36 flex items-center gap-2 rounded-xl border border-line bg-white px-3 py-2 shadow-xl sm:-left-8">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-soft">
+                  <Database size={15} className="text-iris" aria-hidden="true" />
                 </span>
-                <span className="text-xs font-semibold text-gray-800">
-                  MongoDB
-                </span>
+                <span className="text-xs font-semibold text-navy">MongoDB</span>
               </div>
             </div>
           </div>
 
           {/* CONTENT SIDE */}
-          <div className="order-2 lg:order-1 mt-8 lg:mt-0">
-            <div className="inline-flex items-center gap-2 bg-purple-50 border border-purple-100 px-3 py-1 rounded-full mb-5">
-              <GraduationCap size={14} className="text-purple-600" />
-              <span className="text-xs font-semibold text-purple-600 uppercase tracking-wide">
-                Learn from Industry Experts
-              </span>
-            </div>
+          <div className="order-2 mt-8 lg:order-1 lg:mt-0">
+            <h3 className="text-3xl font-extrabold leading-[1.15] text-navy sm:text-4xl xl:text-5xl">
+              Master web development with{" "}
+              <span className="text-gradient">{mentor.name}</span>
+            </h3>
 
-            <h2 className="text-3xl sm:text-4xl xl:text-5xl font-bold text-gray-900 leading-[1.15]">
-              Master Full Stack Development with{" "}
-              <span className="bg-gradient-to-r from-purple-600 to-[#00C6FF] bg-clip-text text-transparent">
-                {mentor.name}
-              </span>
-            </h2>
-
-            <p className="mt-5 text-gray-600 text-sm md:text-base leading-relaxed">
+            <p className="mt-5 text-sm leading-relaxed text-muted md:text-base">
               {mentor.desc}
             </p>
-            <p className="mt-3 text-gray-500 text-sm leading-relaxed hidden md:block">
+            <p className="mt-3 hidden text-sm leading-relaxed text-muted md:block">
               {mentor.fullDesc}
             </p>
 
             {/* Inline stats */}
-            <div className="mt-7 flex items-stretch divide-x divide-gray-200">
+            <div className="mt-7 flex items-stretch divide-x divide-line">
               {stats.map((stat, i) => (
                 <div key={i} className={`flex-1 ${i === 0 ? "pr-4" : "px-4"}`}>
-                  <p className="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-purple-600 to-[#00C6FF] bg-clip-text text-transparent leading-none">
+                  <p className="bg-brand-gradient bg-clip-text text-2xl font-extrabold leading-none text-transparent md:text-3xl">
                     {stat.value}
                   </p>
-                  <p className="text-[11px] md:text-xs text-gray-500 mt-1.5">
+                  <p className="mt-1.5 text-[11px] text-muted md:text-xs">
                     {stat.label}
                   </p>
                 </div>
@@ -190,15 +221,15 @@ const Mentors = () => {
 
             {/* Expertise */}
             <div className="mt-7">
-              <p className="flex items-center gap-2 text-xs font-bold text-gray-800 uppercase tracking-wider mb-3">
-                <Award size={14} className="text-purple-600" />
+              <p className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-navy">
+                <Award size={14} className="text-brand" aria-hidden="true" />
                 Expertise
               </p>
               <div className="flex flex-wrap gap-2">
                 {mentor.expertise.map((skill, i) => (
                   <span
                     key={i}
-                    className="text-[11px] sm:text-xs px-3 py-1.5 rounded-full bg-white border border-gray-200 text-gray-700 font-medium shadow-sm hover:border-purple-300 hover:text-purple-600 transition-colors"
+                    className="rounded-full border border-line bg-white px-3 py-1.5 text-[11px] font-semibold text-navy shadow-sm transition-colors hover:border-brand hover:text-brand sm:text-xs"
                   >
                     {skill}
                   </span>
@@ -207,14 +238,11 @@ const Mentors = () => {
             </div>
 
             {/* What you get */}
-            <ul className="mt-7 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+            <ul className="mt-7 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
               {mentor.features.map((feature, i) => (
-                <li
-                  key={i}
-                  className="flex items-center gap-2.5 text-sm text-gray-700"
-                >
-                  <span className="w-5 h-5 rounded-full bg-gradient-to-br from-purple-600 to-[#00C6FF] flex items-center justify-center shrink-0">
-                    <Check size={12} className="text-white" strokeWidth={3} />
+                <li key={i} className="flex items-center gap-2.5 text-sm text-navy">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-gradient">
+                    <Check size={12} className="text-white" strokeWidth={3} aria-hidden="true" />
                   </span>
                   {feature}
                 </li>
@@ -222,23 +250,26 @@ const Mentors = () => {
             </ul>
 
             {/* CTA */}
-            <div className="mt-9 flex flex-col sm:flex-row sm:items-center gap-3">
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
               <button
+                type="button"
                 onClick={handleLearnClick}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-gradient-to-r from-purple-600 to-[#00C6FF] text-white font-semibold rounded-full shadow-lg shadow-purple-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 text-sm md:text-base"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-gradient px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-iris/40 md:text-base sm:w-auto"
               >
-                <Play size={16} className="fill-white" />
+                <Play size={16} className="fill-white" aria-hidden="true" />
                 {mentor.button}
               </button>
 
               <button
+                type="button"
                 onClick={handleLearnClick}
-                className="group w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-5 py-3.5 text-gray-800 font-semibold text-sm md:text-base hover:text-purple-600 transition-colors"
+                className="group inline-flex w-full items-center justify-center gap-1.5 px-5 py-3.5 text-sm font-semibold text-navy transition-colors hover:text-brand md:text-base sm:w-auto"
               >
                 Explore all courses
                 <ArrowUpRight
                   size={18}
-                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  aria-hidden="true"
+                  className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                 />
               </button>
             </div>

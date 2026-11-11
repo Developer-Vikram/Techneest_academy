@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, googleLogin } from "../../redux/slices/authSlice";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import UserLayout from "../../Layouts/UserLayout";
-import { Star, Rocket, Users, Award, TrendingUp, BadgeCheck, Zap } from "lucide-react";
+import { Check, LogIn } from "lucide-react";
+import { AUTH } from "../../Data/content";
+import { AUTH_IMAGES } from "../../Data/images";
 
 const getSafeRedirectPath = (value) => {
   if (!value || typeof value !== "string") return "/";
@@ -22,7 +24,7 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation(); // Add this to get location state
+  const location = useLocation();
   const { loading } = useSelector((state) => state.auth);
 
   // Get the page user was trying to visit before login
@@ -83,236 +85,231 @@ const Login = () => {
   };
 
   return (
-    <>
-      <UserLayout>
-        <main className="min-h-screen bg-gradient-to-br from-white via-blue-100 to-indigo-200 relative overflow-hidden">
-          {/* Background Glow - Same as HeroSection */}
-          <div className="absolute top-0 left-0 w-80 h-80 bg-purple-200/30 blur-3xl rounded-full" />
-          <div className="absolute bottom-0 right-0 w-80 h-80 bg-blue-200/30 blur-3xl rounded-full" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-100/20 blur-3xl rounded-full" />
+    <UserLayout>
+      <main className="relative min-h-[calc(100vh-5rem)] overflow-hidden bg-navy">
+        {/* ========================================= */}
+        {/* FULL-SCREEN BACKGROUND IMAGE + OVERLAY */}
+        {/* ========================================= */}
+        <img
+          src={AUTH_IMAGES.login}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover"
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-br from-navy via-navy/90 to-iris/60"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-32 top-1/4 h-96 w-96 rounded-full bg-brand/25 blur-[110px]"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-aqua/15 blur-[110px]"
+        />
 
-          <div className="relative z-10 min-h-screen grid lg:grid-cols-2">
-            {/* LEFT SIDE - Normal White Background with gradient accents */}
-            <div className="hidden lg:flex flex-col justify-center bg-gradient-to-r from-blue-100 to-indigo-100 text-gray-900 px-16 xl:px-24 relative overflow-hidden">
-              <div className="relative z-10 max-w-xl">
-                <div className="inline-flex items-center gap-2 bg-purple-50 px-4 py-2 rounded-full mb-6 border border-purple-100">
-                  <Zap size={14} className="text-purple-600" />
-                  <span className="text-xs font-semibold uppercase tracking-wide text-purple-700">
-                    Welcome To Techneest Academy
-                  </span>
-                </div>
-
-                <h1 className="text-5xl font-bold leading-tight mb-6 text-gray-900">
-                  Learn High Income Skills
-                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-[#00C6FF]">
-                    From Industry Experts
-                  </span>
-                </h1>
-
-                <p className="text-gray-600 text-lg leading-relaxed mb-10">
-                  Join thousands of students learning web development,
-                  graphic design, marketing, AI and freelancing skills
-                  to build a successful career.
-                </p>
-
-                {/* Stats Grid */}
-                <div className="grid grid-cols-2 gap-5 mb-8">
-                  <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5">
-                    <div className="flex items-center gap-2 text-3xl font-bold mb-1 text-purple-600">
-                      2500+ <Users size={24} />
-                    </div>
-                    <p className="text-gray-500 text-sm">Active Students</p>
-                  </div>
-
-                  <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5">
-                    <div className="flex items-center gap-2 text-3xl font-bold mb-1 text-purple-600">
-                      92% <Rocket size={24} />
-                    </div>
-                    <p className="text-gray-500 text-sm">Success Rate</p>
-                  </div>
-                </div>
-
-                {/* Trust Badges */}
-                <div className="flex flex-wrap gap-3">
-                  {[
-                    { icon: Award, text: "Certified Courses", color: "text-purple-600" },
-                    { icon: BadgeCheck, text: "Expert Mentors", color: "text-green-600" },
-                    { icon: TrendingUp, text: "Career Growth", color: "text-blue-600" },
-                  ].map((badge, idx) => (
-                    <div key={idx} className="flex items-center gap-2 bg-gray-50 rounded-full px-3 py-1.5 border border-gray-100">
-                      <badge.icon size={14} className={badge.color} />
-                      <span className="text-xs text-gray-600">{badge.text}</span>
-                    </div>
-                  ))}
-                </div>
+        {/* ========================================= */}
+        {/* CENTERED GLASS CARD */}
+        {/* ========================================= */}
+        <div className="relative z-10 flex min-h-[calc(100vh-5rem)] items-center justify-center px-4 py-12">
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="w-full max-w-md"
+          >
+            <div className="glass rounded-3xl p-6 shadow-2xl sm:p-8 md:p-10">
+              {/* Logo */}
+              <div className="mb-6 text-center">
+                <img
+                  src="/techneest-logo-dark.png"
+                  alt="Techneest Academy"
+                  className="mx-auto h-12"
+                />
               </div>
-            </div>
 
-            {/* RIGHT SIDE - White Background with Form */}
-            <div className="flex items-center justify-center px-4 py-10 bg-white">
-              <div className="w-full max-w-md">
-                {/* Mobile Logo */}
-                <div className="lg:hidden text-center mb-8">
-                  <img
-                    src="/techneest-logo.png"
-                    alt="Techneest Academy Logo"
-                    className="h-14 mx-auto"
+              {/* Heading */}
+              <div className="mb-7 text-center">
+                <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-gradient text-white shadow-lg shadow-brand/40">
+                  <LogIn size={22} aria-hidden="true" />
+                </span>
+                <h1 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                  {AUTH.login.formTitle}
+                </h1>
+                <p className="mt-2 text-sm text-white/70">
+                  {AUTH.login.formSubtitle}
+                </p>
+              </div>
+
+              {/* Google Button */}
+              <button
+                type="button"
+                onClick={handleGoogleLogin}
+                className="mb-5 flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-white/20 bg-white/95 text-sm font-semibold text-navy transition-all duration-300 hover:bg-white hover:shadow-lg"
+              >
+                <FcGoogle size={20} aria-hidden="true" />
+                Continue with Google
+              </button>
+
+              {/* Divider */}
+              <div className="mb-5 flex items-center gap-4">
+                <div className="h-px flex-1 bg-white/20" aria-hidden="true" />
+                <span className="text-xs font-semibold uppercase tracking-widest text-white/50">
+                  or
+                </span>
+                <div className="h-px flex-1 bg-white/20" aria-hidden="true" />
+              </div>
+
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Email or Mobile */}
+                <div>
+                  <label
+                    htmlFor="login-username"
+                    className="mb-2 block text-xs font-bold uppercase tracking-widest text-white/70"
+                  >
+                    Email or mobile
+                  </label>
+                  <input
+                    id="login-username"
+                    type="text"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    placeholder="you@example.com or 10-digit mobile"
+                    autoComplete="username"
+                    className="glass-input"
+                    required
                   />
                 </div>
 
-                {/* Card */}
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6 }}
-                  className="bg-white rounded-[36px] shadow-[0_20px_60px_rgba(0,0,0,0.08)] p-6 sm:p-8 md:p-10"
-                >
-                  {/* Desktop Logo */}
-                  <div className="hidden lg:block text-center mb-6">
-                    <img
-                      src="/techneest-logo.png"
-                      alt="Techneest Academy Logo"
-                      className="h-14 mx-auto"
-                    />
-                  </div>
-
-                  {/* Heading */}
-                  <div className="text-center mb-8">
-                    <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
-                      Welcome Back!
-                    </h2>
-                    <p className="text-gray-600 leading-relaxed">
-                      Login to continue your learning journey with Techneest Academy
-                    </p>
-                  </div>
-
-                  {/* Google Button */}
-                  <button
-                    type="button"
-                    onClick={handleGoogleLogin}
-                    className="w-full h-14 rounded-2xl border border-gray-300 bg-white hover:bg-gray-50 hover:scale-[1.01] hover:shadow-md text-gray-700 font-semibold transition-all duration-300 flex items-center justify-center gap-3 mb-6"
+                {/* Password */}
+                <div>
+                  <label
+                    htmlFor="login-password"
+                    className="mb-2 block text-xs font-bold uppercase tracking-widest text-white/70"
                   >
-                    <FcGoogle size={22} />
-                    Continue with Google
-                  </button>
-
-                  {/* Divider */}
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="flex-1 h-px bg-gray-200" />
-                    <span className="text-sm text-gray-500">OR</span>
-                    <div className="flex-1 h-px bg-gray-200" />
-                  </div>
-
-                  {/* Form */}
-                  <form onSubmit={handleSubmit} className="space-y-5">
-                    {/* Email or Mobile */}
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Email or Mobile
-                      </label>
-                      <input
-                        type="text"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        placeholder="Enter your email or mobile"
-                        className="input"
-                        required
-                      />
-                    </div>
-
-                    {/* Password */}
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Password
-                      </label>
-                      <div className="relative">
-                        <input
-                          type={showPassword ? "text" : "password"}
-                          name="password"
-                          value={formData.password}
-                          onChange={handleChange}
-                          placeholder="Enter your password"
-                          className="input pr-14"
-                          required
-                        />
-                        <button
-                          type="button"
-                          onClick={togglePasswordVisibility}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-purple-600 transition-colors"
-                        >
-                          {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Remember & Forgot Password */}
-                    <div className="flex items-center justify-between">
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          name="remember"
-                          checked={formData.remember}
-                          onChange={handleChange}
-                          className="w-4 h-4 accent-purple-600"
-                        />
-                        <span className="text-sm text-gray-600">Remember me</span>
-                      </label>
-
-                      <Link
-                        to="/forgetpassword"
-                        className="text-sm font-semibold text-purple-600 hover:text-purple-700 transition-colors"
-                      >
-                        Forgot Password?
-                      </Link>
-                    </div>
-
-                    {/* Login Button */}
+                    Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="login-password"
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      placeholder="Enter your password"
+                      autoComplete="current-password"
+                      className="glass-input pr-14"
+                      required
+                    />
                     <button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full h-14 rounded-2xl bg-gradient-to-r from-purple-600 to-[#00C6FF] text-white font-semibold hover:scale-[1.01] hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                      type="button"
+                      onClick={togglePasswordVisibility}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 transition-colors hover:text-aqua"
                     >
-                      {loading ? "Logging in..." : "Login To Dashboard"}
+                      {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                     </button>
-                  </form>
+                  </div>
+                </div>
 
-                  {/* Register Link */}
-                  <p className="text-center text-sm text-gray-600 mt-8">
-                    Don't have an account?{" "}
-                    <Link
-                      to="/register"
-                      className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-[#00C6FF] hover:underline"
-                    >
-                      Create Account
-                    </Link>
-                  </p>
-                </motion.div>
-              </div>
+                {/* Remember & Forgot Password */}
+                <div className="flex items-center justify-between">
+                  <label
+                    htmlFor="login-remember"
+                    className="flex cursor-pointer items-center gap-2"
+                  >
+                    <input
+                      id="login-remember"
+                      type="checkbox"
+                      name="remember"
+                      checked={formData.remember}
+                      onChange={handleChange}
+                      className="h-4 w-4 accent-aqua"
+                    />
+                    <span className="text-sm text-white/75">Remember me</span>
+                  </label>
+
+                  <Link
+                    to="/forgetpassword"
+                    className="text-sm font-semibold text-aqua transition-colors hover:text-white"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+
+                {/* Login Button */}
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="h-12 w-full rounded-xl bg-brand-gradient text-sm font-bold text-white shadow-lg shadow-brand/40 transition-all duration-300 hover:shadow-xl hover:shadow-iris/50 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {loading ? "Signing in…" : "Sign in"}
+                </button>
+              </form>
+
+              {/* Benefit highlights */}
+              <ul className="mt-7 space-y-2 border-t border-white/15 pt-6">
+                {AUTH.login.benefits.map((benefit) => (
+                  <li
+                    key={benefit}
+                    className="flex items-center gap-2.5 text-xs font-medium text-white/75"
+                  >
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-gradient text-white">
+                      <Check size={11} aria-hidden="true" />
+                    </span>
+                    {benefit}
+                  </li>
+                ))}
+              </ul>
+
+              {/* Register Link */}
+              <p className="mt-6 text-center text-sm text-white/70">
+                New to Techneest?{" "}
+                <Link
+                  to="/register"
+                  className="font-bold text-aqua transition-colors hover:text-white hover:underline"
+                >
+                  Create an account
+                </Link>
+              </p>
             </div>
-          </div>
+          </motion.div>
+        </div>
 
-          <style>{`
-            .input {
-              width: 100%;
-              height: 56px;
-              padding: 0 18px;
-              border: 1px solid #e5e7eb;
-              border-radius: 18px;
-              background: rgba(255,255,255,0.9);
-              transition: all 0.3s ease;
-              outline: none;
-            }
+        <style>{`
+          .glass-input {
+            width: 100%;
+            height: 52px;
+            padding: 0 16px;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            font-size: 0.875rem;
+            color: #ffffff;
+            transition: all 0.25s ease;
+            outline: none;
+          }
 
-            .input:focus {
-              border-color: #8b5cf6;
-              box-shadow: 0 0 0 4px rgba(139,92,246,0.12);
-              background: white;
-            }
-          `}</style>
-        </main>
-      </UserLayout>
-    </>
+          .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.45);
+          }
+
+          .glass-input:focus {
+            border-color: #22D3EE;
+            box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.2);
+            background: rgba(255, 255, 255, 0.14);
+          }
+        `}</style>
+      </main>
+    </UserLayout>
   );
 };
 

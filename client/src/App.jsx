@@ -26,6 +26,7 @@ import PdfReader from "./Pages/Blog/PdfReader";
 import ProductPDF from "./Pages/Blog/ProductPDF";
 
 import CategoryCourses from "./Pages/Home/CategoryCourses";
+import Internship from "./Pages/Internship";
 
 /* ================== STATIC PAGES ================== */
 import About from "./Pages/About";
@@ -91,6 +92,8 @@ function App() {
 
 
         <Route path="/contact" element={<Contact />} />
+
+        <Route path="/internship" element={<Internship />} />
 
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/blogs/:id" element={<BlogDetail />} />

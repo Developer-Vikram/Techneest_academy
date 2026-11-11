@@ -1,21 +1,20 @@
-import React, { useEffect } from "react";
 import { motion } from "framer-motion";
-import { FiArrowRight } from "react-icons/fi";
+import { useEffect } from "react";
 
 /* Redux */
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import AnimatedButton from "../../../Components/AnimatedButton";
 import {
   getAllCategories,
   getCoursesByCategoryId,
 } from "../../../redux/slices/categoryCourseSlice";
-import { Link } from "react-router-dom";
-import AnimatedButton from "../../../Components/AnimatedButton";
 
 export default function CourseCategories() {
   const dispatch = useDispatch();
 
   const { categories, loadingCategories } = useSelector(
-    (state) => state.categoryCourse
+    (state) => state.categoryCourse,
   );
 
   useEffect(() => {
@@ -80,13 +79,13 @@ export default function CourseCategories() {
               <img
                 src={
                   cat.image ||
-                  "https://maxifyacademy.com/core/resources/views/templates/basic/images/3_2.svg"
+                  "https://techneestacademy.com/core/resources/views/templates/basic/images/3_2.svg"
                 }
                 alt={cat.name || "category image"}
                 className="w-16 h-16 rounded-full object-cover"
                 onError={(e) => {
                   e.currentTarget.src =
-                    "https://maxifyacademy.com/core/resources/views/templates/basic/images/3_2.svg";
+                    "https://techneestacademy.com/core/resources/views/templates/basic/images/3_2.svg";
                 }}
               />
 

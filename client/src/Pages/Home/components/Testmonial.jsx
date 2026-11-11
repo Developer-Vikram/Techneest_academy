@@ -3,8 +3,6 @@ import {
   Star,
   Quote,
   Users,
-  TrendingUp,
-  Award,
   ChevronLeft,
   ChevronRight,
   ChevronDown,
@@ -30,11 +28,8 @@ const Testimonials = () => {
               name: r?.reviewer_name || "Student",
               role: course?.course_title || "Learner",
               company: "Techneest Academy",
-              income: "Success Story",
-              image: "https://i.ibb.co/HfSZgpRc/avatr.avif",
               review: r?.review || "Amazing course experience.",
               rating: r?.rating || 5,
-              hike: "100%",
             }))
           : [],
       )
@@ -102,92 +97,86 @@ const Testimonials = () => {
     dispatch(getCourseReviewData());
   }, [dispatch]);
 
+  const initials = (name = "") =>
+    name
+      .split(" ")
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join("") || "S";
+
   // Compact Review Card Component
   const CompactReviewCard = ({ t, cardIndex }) => {
     const isExpanded = expandedReviews[cardIndex];
     const maxLength = 80;
     const needsExpand = t.review.length > maxLength;
-    
-    const displayText = needsExpand && !isExpanded 
+
+    const displayText = needsExpand && !isExpanded
       ? t.review.substring(0, maxLength) + "..."
       : t.review;
 
     return (
-      <div className="group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 h-full flex flex-col">
+      <div className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-softdeep hover:shadow-lift">
         {/* Top Gradient Border */}
-        <div className="h-0.5 bg-gradient-to-r from-purple-500 to-blue-500"></div>
+        <div className="h-1 bg-brand-gradient" aria-hidden="true"></div>
 
-        {/* Content - Compact */}
-        <div className="p-4 flex flex-col flex-grow">
-          
-          {/* User Info Section - Name on Top */}
-          <div className="flex items-center gap-2.5 mb-3">
-            {/* Avatar - Small */}
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full blur-[2px] opacity-50"></div>
-              <img
-                src={t.image}
-                alt={t.name}
-                className="relative w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
-              />
-            </div>
-
-            {/* Name and Role */}
-            <div className="flex-1 min-w-0">
-              <h4 className="text-sm font-bold text-gray-900 truncate">
-                {t.name}
-              </h4>
-              <div className="flex items-center gap-1 flex-wrap">
-                {/* <p className="text-[10px] text-purple-600 font-medium truncate">
-                  {t.role}
-                </p> */}
-                <p className="text-[10px] text-gray-500 truncate">
-                  {t.company}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Rating Stars - Compact */}
-          <div className="flex gap-0.5 mb-2">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                size={12}
-                className={`${
-                  i < t.rating
-                    ? "fill-yellow-400 text-yellow-400"
-                    : "text-gray-200"
-                }`}
-              />
-            ))}
-          </div>
+        {/* Content */}
+        <div className="flex flex-grow flex-col p-5">
+          {/* Quote icon */}
+          <span className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-soft text-brand">
+            <Quote size={16} aria-hidden="true" />
+          </span>
 
           {/* Review Text with Show More/Show Less */}
-          <div className="mb-2">
-            <p className="text-gray-600 text-xs leading-relaxed">
-              "{displayText}"
+          <div className="mb-3">
+            <p className="text-xs leading-relaxed text-muted">
+              “{displayText}”
             </p>
             {needsExpand && (
               <button
+                type="button"
                 onClick={() => toggleReviewExpand(cardIndex)}
-                className="text-purple-500 text-[10px] font-semibold mt-1 hover:text-purple-600 transition-colors inline-flex items-center gap-0.5"
+                className="mt-1 inline-flex items-center gap-0.5 text-[10px] font-semibold text-brand transition-colors hover:text-iris"
               >
                 {isExpanded ? (
-                  <>Show Less <ChevronUp size={10} /></>
+                  <>Show Less <ChevronUp size={10} aria-hidden="true" /></>
                 ) : (
-                  <>Show More <ChevronDown size={10} /></>
+                  <>Show More <ChevronDown size={10} aria-hidden="true" /></>
                 )}
               </button>
             )}
           </div>
 
-          {/* Growth Badge - Compact */}
-          <div className="inline-flex items-center gap-1 bg-green-50 px-2 py-0.5 rounded-full w-fit mb-2">
-            <TrendingUp size={10} className="text-green-600" />
-            <span className="text-[10px] font-semibold text-green-700">
-              +{t.hike} Growth
+          {/* Rating Stars */}
+          <div className="mb-3 flex gap-0.5" aria-label={`Rated ${t.rating} out of 5`}>
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                size={12}
+                aria-hidden="true"
+                className={`${
+                  i < t.rating
+                    ? "fill-yellow-400 text-yellow-400"
+                    : "text-line"
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* User Info Section */}
+          <div className="mt-auto flex items-center gap-2.5 border-t border-line pt-3">
+            <span
+              aria-hidden="true"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-navy text-xs font-bold text-white"
+            >
+              {initials(t.name)}
             </span>
+            <div className="min-w-0 flex-1">
+              <h4 className="truncate text-sm font-bold text-navy">
+                {t.name}
+              </h4>
+              <p className="truncate text-[10px] text-muted">{t.role}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -196,9 +185,13 @@ const Testimonials = () => {
 
   if (loading) {
     return (
-      <section className="w-full bg-gradient-to-br from-gray-50 via-white to-purple-50/20 py-16">
-        <div className="flex justify-center items-center">
-          <div className="w-10 h-10 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div>
+      <section className="w-full bg-canvas py-16" aria-label="Student stories">
+        <div className="flex items-center justify-center">
+          <div
+            className="h-10 w-10 animate-spin rounded-full border-4 border-softdeep border-t-brand"
+            role="status"
+            aria-label="Loading testimonials"
+          ></div>
         </div>
       </section>
     );
@@ -206,76 +199,86 @@ const Testimonials = () => {
 
   if (!testimonials.length) {
     return (
-      <section className="w-full bg-gradient-to-br from-gray-50 via-white to-purple-50/20 py-16">
-        <div className="text-center">
-          <p className="text-gray-500">No testimonials yet</p>
+      <section className="w-full bg-canvas py-16" aria-label="Student stories">
+        <div className="mx-auto max-w-md rounded-2xl border border-line bg-white p-8 text-center shadow-card">
+          <p className="text-base font-bold text-navy">
+            Student stories are on the way
+          </p>
+          <p className="mt-2 text-sm text-muted">
+            Reviews submitted by students appear here automatically. Be among
+            the first to share yours.
+          </p>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="w-full bg-gradient-to-br from-gray-50 via-white to-purple-50/20 py-4 md:py-4 overflow-hidden">
-      <div className="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header - Compact */}
+    <section
+      className="w-full overflow-hidden bg-canvas py-12 md:py-16"
+      aria-label="Student stories"
+      onMouseEnter={() => setIsAutoPlaying(false)}
+      onMouseLeave={() => setIsAutoPlaying(true)}
+    >
+      <div className="mx-auto max-w-[100rem] px-4 sm:px-6 lg:px-8">
+
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
           viewport={{ once: true }}
-          className="text-center max-w-3xl mx-auto mb-8 md:mb-10"
+          className="mx-auto mb-8 max-w-3xl text-center md:mb-10"
         >
-          <div className="inline-flex items-center gap-2 bg-purple-100 px-3 py-1.5 rounded-full mb-3">
-            <Award size={14} className="text-purple-600" />
-            <span className="text-[10px] font-bold text-purple-700 uppercase tracking-wider">
-              Success Stories
-            </span>
-          </div>
+          <span className="mb-3 inline-flex items-center gap-2 rounded-full bg-soft px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-brand">
+            <Quote size={12} aria-hidden="true" />
+            Success stories
+          </span>
 
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            What Our{" "}
-            <span className="bg-gradient-to-r from-purple-600 to-[#00C6FF] bg-clip-text text-transparent">
-              Students Say
-            </span>
+          <h2 className="mb-2 text-2xl font-extrabold tracking-tight text-navy sm:text-3xl md:text-4xl">
+            What our <span className="text-gradient">students say</span>
           </h2>
 
-          <p className="text-sm md:text-base text-gray-600 leading-relaxed">
-            Real stories from students who transformed their careers
+          <p className="text-sm leading-relaxed text-muted md:text-base">
+            Verified reviews from students learning and building with Techneest
           </p>
 
-          <div className="inline-flex items-center gap-1.5 bg-purple-50 px-3 py-1 rounded-full mt-3">
-            <Users size={12} className="text-purple-600" />
-            <span className="text-[11px] font-semibold text-purple-700">
-              {testimonials.length}+ Success Stories
+          <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-softdeep bg-white px-3 py-1">
+            <Users size={12} className="text-brand" aria-hidden="true" />
+            <span className="text-[11px] font-semibold text-navy">
+              {testimonials.length}+ success stories
             </span>
-          </div>
+          </span>
         </motion.div>
 
-        {/* Custom Slider - Centered Buttons */}
+        {/* Custom Slider */}
         <div className="relative">
-          {/* Navigation Arrows - Perfectly Centered */}
+          {/* Navigation Arrows */}
           {testimonials.length > itemsToShow && (
             <>
               <button
+                type="button"
                 onClick={prevSlide}
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 md:p-2.5 shadow-md hover:shadow-lg transition-all duration-300 hover:bg-purple-50 group border border-gray-200"
+                aria-label="Previous testimonials"
+                className="absolute left-0 top-1/2 z-10 rounded-full border border-line bg-white p-2 shadow-md transition-all duration-300 hover:bg-brand-gradient hover:text-white md:p-2.5"
                 style={{ transform: 'translateY(-50%)' }}
               >
-                <ChevronLeft size={18} className="text-gray-600 group-hover:text-purple-600" />
+                <ChevronLeft size={18} className="text-navy" />
               </button>
               <button
+                type="button"
                 onClick={nextSlide}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 md:p-2.5 shadow-md hover:shadow-lg transition-all duration-300 hover:bg-purple-50 group border border-gray-200"
+                aria-label="Next testimonials"
+                className="absolute right-0 top-1/2 z-10 rounded-full border border-line bg-white p-2 shadow-md transition-all duration-300 hover:bg-brand-gradient hover:text-white md:p-2.5"
                 style={{ transform: 'translateY(-50%)' }}
               >
-                <ChevronRight size={18} className="text-gray-600 group-hover:text-purple-600" />
+                <ChevronRight size={18} className="text-navy" />
               </button>
             </>
           )}
 
           {/* Cards Container */}
-          <div className="overflow-hidden mb-5 px-6 md:px-8">
+          <div className="mb-5 overflow-hidden px-6 md:px-8">
             <motion.div
               className={`grid gap-4 transition-all duration-500 ease-in-out ${
                 itemsToShow === 4
@@ -305,10 +308,10 @@ const Testimonials = () => {
             </motion.div>
           </div>
 
-          {/* Progress Indicator - Compact */}
+          {/* Progress Indicator */}
           {testimonials.length > itemsToShow && (
-            <div className="text-center mt-5">
-              <p className="text-[10px] text-gray-400">
+            <div className="mt-5 text-center">
+              <p className="text-[10px] text-muted/70">
                 {startIndex + 1} - {Math.min(startIndex + itemsToShow, testimonials.length)} of {testimonials.length}
               </p>
             </div>

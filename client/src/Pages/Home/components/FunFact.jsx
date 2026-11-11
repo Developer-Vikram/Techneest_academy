@@ -1,114 +1,78 @@
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import light from '../../../assets/light.svg'
-import butterfly from '../../../assets/butterfly.svg'
+import { GraduationCap, Presentation, TrendingUp, Users } from "lucide-react";
+import CountUp from "../../../Components/CountUp";
+import SmartImage from "../../../Components/SmartImage";
+import { INTERNSHIP_IMAGES } from "../../../Data/images";
+
+/* Real academy numbers — restored from the original FunFact section. */
+const STATS = [
+  { icon: Users, value: 1525, suffix: "+", label: "Students enrolled" },
+  { icon: Presentation, value: 1050, suffix: "+", label: "Classes completed" },
+  { icon: TrendingUp, value: 800, suffix: "+", label: "Learners report" },
+  { icon: GraduationCap, value: 10, suffix: "+", label: "Top instructors" },
+];
 
 export default function FunFact() {
-
-  const [counts, setCounts] = useState({
-    students: 0,
-    classes: 0,
-    learners: 0,
-    instructors: 0,
-  });
-
-  useEffect(() => {
-    const targets = {
-      students: 1525,
-      classes: 1050,
-      learners: 800,
-      instructors: 10,
-    };
-
-    const duration = 2000;
-    const interval = 20;
-
-    const steps = {};
-    Object.keys(targets).forEach(
-      key => (steps[key] = Math.ceil(targets[key] / (duration / interval)))
-    );
-
-    const timer = setInterval(() => {
-      setCounts(prev => {
-        const updated = { ...prev };
-        let done = true;
-
-        Object.keys(targets).forEach(key => {
-          if (updated[key] < targets[key]) {
-            updated[key] += steps[key];
-            if (updated[key] > targets[key]) {
-              updated[key] = targets[key];
-            }
-            done = false;
-          }
-        });
-
-        if (done) clearInterval(timer);
-        return updated;
-      });
-    }, interval);
-
-    return () => clearInterval(timer);
-  }, []);
-
   return (
-    <section className="relative bg-white  md:py-0 lg:h-70">
-      <div className="mx-auto p-6 relative overflow-hidden bg-[#003867] max-w-[85%] rounded-md md:-top-40">
+    <section
+      aria-label="Academy statistics"
+      className="relative overflow-hidden bg-navy py-14 md:py-20"
+    >
+      {/* brand glows */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-brand/25 blur-[110px]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-iris/25 blur-[110px]"
+      />
 
-        {/* Shapes */}
-        <motion.img
-          src={light}
-          alt="shape"
-          className="absolute top-43 left-175 w-10 animate-bounce"
-        />
-        <motion.img
-          src={butterfly}
-          alt="shape"
-          className="absolute bottom-10 right-145 w-25 animate-spin-slow"
-        />
-
-        <div className="flex flex-col lg:flex-row justify-between items-center gap-10 w-full">
-
-          {/* Image */}
-          <div className="flex-shrink-0 w-full md:w-1/2">
-            <img
-              src="https://i.ibb.co/234kD331/funfact-img-min.png"
-              alt="funfact"
-              className="w-full object-cover sm:w-[90%] rounded-br-[30%]"
+      <div className="relative z-10 mx-auto max-w-[95rem] px-4 sm:px-6 lg:px-8">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          {/* IMAGE */}
+          <div className="relative order-2 lg:order-1">
+            <div
+              aria-hidden="true"
+              className="absolute -inset-3 rounded-[2rem] bg-brand-gradient opacity-25 blur-xl"
+            />
+            <SmartImage
+              src={INTERNSHIP_IMAGES.teamwork}
+              alt="Techneest students collaborating on a real team project"
+              ratioClass="aspect-[4/3] rounded-2xl ring-1 ring-white/15"
+              className="relative shadow-2xl"
             />
           </div>
 
-          {/* Counters */}
-          <div className="grid grid-cols-2 gap-20 md:w-1/2">
+          {/* COUNTERS */}
+          <div className="order-1 lg:order-2">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
+              <span className="h-1.5 w-1.5 rounded-full bg-aqua" aria-hidden="true" />
+              Techneest by the numbers
+            </span>
 
-            <div>
-              <h4 className="text-4xl font-bold text-white">
-                {counts.students}+
-              </h4>
-              <p className="text-gray-100 text-xl mt-2">Student enrolled</p>
+            <h2 className="mt-5 text-3xl font-extrabold leading-tight tracking-tight text-white md:text-4xl">
+              Real students. Real classes.{" "}
+              <span className="text-gradient">Real momentum.</span>
+            </h2>
+
+            <div className="mt-8 grid grid-cols-2 gap-4 md:gap-6">
+              {STATS.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition-colors duration-300 hover:border-aqua/40 md:p-6"
+                >
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-gradient text-white">
+                    <stat.icon size={18} aria-hidden="true" />
+                  </span>
+                  <p className="mt-4 bg-brand-gradient bg-clip-text text-3xl font-extrabold text-transparent md:text-4xl">
+                    <CountUp value={stat.value} suffix={stat.suffix} />
+                  </p>
+                  <p className="mt-1 text-sm font-medium text-white/60">
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
             </div>
-
-            <div>
-              <h4 className="text-4xl font-bold text-white">
-                {counts.classes}+
-              </h4>
-              <p className="text-gray-100 text-xl mt-2">Classes completed</p>
-            </div>
-
-            <div>
-              <h4 className="text-4xl font-bold text-white">
-                {counts.learners}+
-              </h4>
-              <p className="text-gray-100 text-xl mt-2">Learners report</p>
-            </div>
-
-            <div>
-              <h4 className="text-4xl font-bold text-white">
-                {counts.instructors}+
-              </h4>
-              <p className="text-gray-100 text-xl mt-2">Top instructors</p>
-            </div>
-
           </div>
         </div>
       </div>

@@ -1,88 +1,128 @@
-import React from "react"
-import { Rocket, CheckCircle2, Clock, TrendingUp, Sparkles, Phone, Mail, Headphones, MessageCircle } from "lucide-react"
-import AnimatedButton from "../../../Components/AnimatedButton"
+import React from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { ArrowRight, Headphones, Mail, MessageCircle, Phone } from "lucide-react";
+import SmartImage from "../../../Components/SmartImage";
+import { HOME_FINAL_CTA, SITE } from "../../../Data/content";
+import { CTA_IMAGES } from "../../../Data/images";
 
 const FinalCTA = () => {
-    return (
-        <>
-        <div className="relative overflow-hidden bg-gradient-to-br from-purple-600 via-[#0072FF] to-indigo-700 p-6 md:p-10 shadow-2xl">
-
-    {/* Background Blur Effects */}
-    <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
-    <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-300/20 rounded-full blur-2xl"></div>
-
-    <div className="relative z-10 text-center">
-
-        {/* Icon */}
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-white/15 backdrop-blur-md rounded-2xl border border-white/20 shadow-lg mb-5">
-            <Headphones size={30} className="text-white" />
+  return (
+    <section aria-label="Get started" className="bg-canvas px-4 pb-12 sm:px-6 md:pb-20 lg:px-8">
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        className="relative mx-auto max-w-[95rem] overflow-hidden rounded-2xl"
+      >
+        {/* Background image */}
+        <div className="absolute inset-0" aria-hidden="true">
+          <SmartImage
+            src={CTA_IMAGES.band}
+            alt=""
+            ratioClass="h-full w-full"
+          />
         </div>
 
-        {/* Heading */}
-        <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">
-            Still Have Questions?
-        </h3>
+        {/* Gradient overlay: navy → blue → indigo */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-r from-navy via-navy/90 to-iris/70"
+        />
 
-        <p className="text-sm md:text-base text-purple-100 max-w-xl mx-auto leading-relaxed mb-8">
-            Our expert support team is available 24/7 to guide you through your learning journey and answer every question.
-        </p>
+        <div className="relative z-10 px-6 py-14 text-center md:px-12 md:py-20">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-sm">
+            <Headphones size={14} aria-hidden="true" />
+            Start today
+          </span>
 
-        {/* Contact Cards */}
-        <div className="grid md:grid-cols-3 grid-cols-1 gap-4 max-w-5xl mx-auto">
+          <h2 className="mx-auto mt-6 max-w-2xl text-3xl font-extrabold leading-tight tracking-tight text-white md:text-4xl">
+            {HOME_FINAL_CTA.title}
+          </h2>
 
-            {/* Email */}
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 flex items-center gap-4 hover:bg-white/15 transition-all duration-300">
-                <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-md flex-shrink-0">
-                    <Mail size={22} className="text-purple-600" />
-                </div>
+          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-white/75 md:text-lg">
+            {HOME_FINAL_CTA.subtitle}
+          </p>
 
-                <div className="text-left min-w-0">
-                    <p className="text-xs text-purple-100 uppercase tracking-wide">
-                        Email Support
-                    </p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link
+              to={HOME_FINAL_CTA.primaryCta.path}
+              className="group inline-flex items-center justify-center gap-2 rounded-full bg-brand-gradient px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand/40 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-iris/50"
+            >
+              {HOME_FINAL_CTA.primaryCta.label}
+              <ArrowRight
+                size={16}
+                aria-hidden="true"
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              />
+            </Link>
 
-                    <p className="text-sm md:text-base font-semibold text-white truncate">
-                        Manager@techneest.com
-                    </p>
-                </div>
-            </div>
+            <Link
+              to={HOME_FINAL_CTA.secondaryCta.path}
+              className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/40 px-7 py-3.5 text-sm font-bold text-white backdrop-blur-sm transition-all duration-300 hover:border-white hover:bg-white hover:text-navy"
+            >
+              {HOME_FINAL_CTA.secondaryCta.label}
+            </Link>
+          </div>
 
-            {/* Phone */}
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 flex items-center gap-4 hover:bg-white/15 transition-all duration-300">
-                <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-md flex-shrink-0">
-                    <Phone size={22} className="text-purple-600" />
-                </div>
+          {/* Support cards */}
+          <div className="mx-auto mt-12 grid max-w-4xl grid-cols-1 gap-4 md:grid-cols-3">
+            <a
+              href={`mailto:${SITE.contact.email}`}
+              className="glass flex items-center gap-4 rounded-2xl p-4 text-left transition-all duration-300 hover:bg-white/20"
+            >
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-brand shadow-md">
+                <Mail size={20} aria-hidden="true" />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-xs uppercase tracking-wide text-white/70">
+                  Email support
+                </span>
+                <span className="block truncate text-sm font-bold text-white">
+                  {SITE.contact.email}
+                </span>
+              </span>
+            </a>
 
-                <div className="text-left">
-                    <p className="text-xs text-purple-100 uppercase tracking-wide">
-                        Call Support
-                    </p>
+            <a
+              href={`tel:${SITE.contact.phoneHref}`}
+              className="glass flex items-center gap-4 rounded-2xl p-4 text-left transition-all duration-300 hover:bg-white/20"
+            >
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-brand shadow-md">
+                <Phone size={20} aria-hidden="true" />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-xs uppercase tracking-wide text-white/70">
+                  Call support
+                </span>
+                <span className="block truncate text-sm font-bold text-white">
+                  {SITE.contact.phone}
+                </span>
+              </span>
+            </a>
 
-                    <p className="text-sm md:text-base font-semibold text-white">
-                        +91 85959 73101
-                    </p>
-                </div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 flex items-center gap-4 hover:bg-white/15 transition-all duration-300">
-                <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-md flex-shrink-0">
-                    <MessageCircle size={22} className="text-purple-600" />
-                </div>
-
-                <div className="text-left text-xs text-purple-100 uppercase tracking-wide">
-                    Chat with Support
-                    
-                <p className="text-sm md:text-base font-semibold text-white">
-                        24/7 Chat Support
-                    </p>
-                </div>
-
-            </div>
-                
-
+            <Link
+              to="/contact"
+              className="glass flex items-center gap-4 rounded-2xl p-4 text-left transition-all duration-300 hover:bg-white/20"
+            >
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-brand shadow-md">
+                <MessageCircle size={20} aria-hidden="true" />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-xs uppercase tracking-wide text-white/70">
+                  Chat with us
+                </span>
+                <span className="block truncate text-sm font-bold text-white">
+                  Send an enquiry
+                </span>
+              </span>
+            </Link>
+          </div>
         </div>
-    </div>
-</div></>
-    )
-}
+      </motion.div>
+    </section>
+  );
+};
 
-export default FinalCTA
+export default FinalCTA;

@@ -6,15 +6,16 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   BookOpen,
+  Briefcase,
   ChevronDown,
   ChevronRight,
   GraduationCap,
   Home,
+  Info,
   LogIn,
   LogOut,
-  Mail,
   Menu,
-  ShoppingBag,
+  Phone,
   User,
   UserPlus,
   X,
@@ -24,8 +25,17 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../redux/slices/authSlice";
 
-// Brand gradient (isko badal do to poora header change ho jayega)
-const GRADIENT = "bg-gradient-to-r from-purple-600 to-[#00C6FF]";
+/* CONTENT */
+import { NAV_LINKS } from "../Data/content";
+
+/* Icon per nav path (presentation only) */
+const NAV_ICONS = {
+  "/": Home,
+  "/courses": BookOpen,
+  "/internship": Briefcase,
+  "/about": Info,
+  "/contact": Phone,
+};
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,14 +66,6 @@ const Header = () => {
     ? [user.firstname, user.lastname].filter(Boolean).join(" ")
     : "Guest User";
   const initial = user?.firstname?.[0]?.toUpperCase() || "U";
-
-  const navLinks = [
-    { name: "Home", path: "/", icon: Home },
-    { name: "Courses", path: "/courses", icon: BookOpen },
-    { name: "Products", path: "/digital-product", icon: ShoppingBag },
-    { name: "Contact", path: "/contact", icon: Mail },
-    { name: "My Courses", path: "/my-courses", icon: GraduationCap },
-  ];
 
   const isActive = (path) => {
     if (path === "/") return location.pathname === path;
@@ -148,11 +150,11 @@ const Header = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className={`sticky top-0 z-[100] w-full transition-all duration-300 ${
           scrolled
-            ? "border-b border-gray-200/70 bg-white/80 shadow-[0_10px_30px_-15px_rgba(88,28,135,0.25)] backdrop-blur-xl"
+            ? "border-b border-line bg-white/90 shadow-[0_10px_30px_-15px_rgba(10,21,48,0.2)] backdrop-blur-xl"
             : "border-b border-transparent bg-white"
         }`}
       >
-        <div className="mx-auto w-full max-w-[105rem] px-4 sm:px-6 lg:px-10">
+        <div className="mx-auto w-full max-w-[95rem] px-4 sm:px-6 lg:px-8">
           <div
             className={`flex items-center justify-between gap-4 transition-all duration-300 ${
               scrolled ? "h-16 md:h-[72px]" : "h-16 md:h-20"
@@ -163,22 +165,25 @@ const Header = () => {
               to="/"
               onClick={handleLogoClick}
               className="relative z-10 flex shrink-0 items-center"
+              aria-label="Techneest Academy — home"
             >
-              <motion.img
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
+              <img
                 src="/techneest-logo.png"
                 alt="Techneest Academy"
                 className={`w-auto transition-all duration-300 ${
-                  scrolled ? "h-10 md:h-20" : "h-11 md:h-16"
+                  scrolled ? "h-10 md:h-12" : "h-11 md:h-14"
                 }`}
               />
             </Link>
 
-            {/* DESKTOP NAV */}
-            <nav className="hidden items-center gap-1 rounded-full bg-gray-100/80 p-1.5 ring-1 ring-gray-200/60 lg:flex">
-              {navLinks.map((link) => {
+            {/* DESKTOP NAV — icon + label per link */}
+            <nav
+              aria-label="Main navigation"
+              className="hidden items-center gap-1 lg:flex"
+            >
+              {NAV_LINKS.map((link) => {
                 const active = isActive(link.path);
+                const Icon = NAV_ICONS[link.path] || BookOpen;
                 return (
                   <Link
                     key={link.path}
@@ -187,23 +192,21 @@ const Header = () => {
                       if (link.path === "/") scrollToTop();
                       setIsProfileOpen(false);
                     }}
-                    className={`relative whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-colors duration-300 xl:px-5 xl:text-[15px] ${
+                    aria-current={active ? "page" : undefined}
+                    className={`relative flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition-colors duration-300 ${
                       active
-                        ? "text-purple-700"
-                        : "text-gray-600 hover:text-gray-900"
+                        ? "text-white"
+                        : "text-muted hover:bg-soft hover:text-navy"
                     }`}
                   >
                     {active && (
                       <motion.span
                         layoutId="nav-active-pill"
-                        className="absolute inset-0 rounded-full bg-white shadow-[0_2px_10px_-2px_rgba(88,28,135,0.25)] ring-1 ring-black/5"
-                        transition={{
-                          type: "spring",
-                          stiffness: 380,
-                          damping: 32,
-                        }}
+                        className="absolute inset-0 rounded-full bg-brand-gradient shadow-md shadow-brand/30"
+                        transition={{ type: "spring", stiffness: 380, damping: 32 }}
                       />
                     )}
+                    <Icon size={15} className="relative z-10" aria-hidden="true" />
                     <span className="relative z-10">{link.name}</span>
                   </Link>
                 );
@@ -216,25 +219,25 @@ const Header = () => {
                 /* ---------- PROFILE DROPDOWN (md+) ---------- */
                 <div className="relative hidden md:block" ref={profileRef}>
                   <button
+                    type="button"
                     onClick={() => setIsProfileOpen((p) => !p)}
                     aria-expanded={isProfileOpen}
+                    aria-haspopup="menu"
                     className={`flex items-center gap-2.5 rounded-full border py-1.5 pl-1.5 pr-3 transition-all duration-300 ${
                       isProfileOpen
-                        ? "border-purple-200 bg-purple-50"
-                        : "border-gray-200 bg-white hover:border-purple-200 hover:bg-purple-50/50"
+                        ? "border-softdeep bg-soft"
+                        : "border-line bg-white hover:border-softdeep hover:bg-soft/50"
                     }`}
                   >
-                    <span
-                      className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white shadow-md shadow-purple-500/30 ${GRADIENT}`}
-                    >
+                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-gradient text-sm font-bold text-white shadow-md shadow-brand/30">
                       {initial}
                     </span>
-                    <span className="hidden max-w-[110px] truncate text-sm font-semibold capitalize text-gray-800 xl:block">
+                    <span className="hidden max-w-[110px] truncate text-sm font-semibold capitalize text-navy xl:block">
                       {user.firstname}
                     </span>
                     <ChevronDown
                       size={16}
-                      className={`text-gray-500 transition-transform duration-300 ${
+                      className={`text-muted transition-transform duration-300 ${
                         isProfileOpen ? "rotate-180" : ""
                       }`}
                     />
@@ -243,37 +246,42 @@ const Header = () => {
                   <AnimatePresence>
                     {isProfileOpen && (
                       <motion.div
+                        role="menu"
                         initial={{ opacity: 0, y: 8, scale: 0.97 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 8, scale: 0.97 }}
                         transition={{ duration: 0.18 }}
-                        className="absolute right-0 top-full mt-3 w-64 origin-top-right overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl shadow-purple-900/10"
+                        className="absolute right-0 top-full mt-3 w-64 origin-top-right overflow-hidden rounded-2xl border border-line bg-white shadow-2xl shadow-navy/10"
                       >
-                        <div className="border-b border-gray-100 bg-gradient-to-br from-purple-50 to-cyan-50 px-4 py-4">
-                          <p className="truncate text-sm font-bold capitalize text-gray-900">
+                        <div className="border-b border-line bg-soft px-4 py-4">
+                          <p className="truncate text-sm font-bold capitalize text-navy">
                             {fullName}
                           </p>
-                          <p className="truncate text-xs text-gray-500">
+                          <p className="truncate text-xs text-muted">
                             {user.email}
                           </p>
                         </div>
 
                         <div className="p-2">
                           <Link
+                            role="menuitem"
                             to="/my-courses/profile"
-                            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-purple-50 hover:text-purple-700"
+                            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-soft hover:text-brand"
                           >
                             <User size={17} />
                             My Profile
                           </Link>
                           <Link
+                            role="menuitem"
                             to="/my-courses"
-                            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-purple-50 hover:text-purple-700"
+                            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-soft hover:text-brand"
                           >
                             <GraduationCap size={17} />
                             My Courses
                           </Link>
                           <button
+                            type="button"
+                            role="menuitem"
                             onClick={handleLogout}
                             className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
                           >
@@ -286,53 +294,50 @@ const Header = () => {
                   </AnimatePresence>
                 </div>
               ) : (
-                /* ---------- LOGIN / REGISTER (md+) ---------- */
+                /* ---------- REGISTER + STUDENT LOGIN (md+) ---------- */
                 <div className="hidden items-center gap-2 md:flex">
                   <Link
-                    to={loginRedirect}
-                    className="group/login flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-gray-700 transition-all duration-300 hover:bg-gray-100 hover:text-purple-700"
+                    to="/register"
+                    className="flex items-center gap-2 rounded-full border border-navy/25 px-4 py-2.5 text-sm font-semibold text-navy transition-all duration-300 hover:border-navy hover:bg-navy hover:text-white"
                   >
-                    <LogIn
-                      size={17}
-                      className="transition-transform duration-300 group-hover/login:-rotate-12"
-                    />
-                    Login
+                    <UserPlus size={16} aria-hidden="true" />
+                    Register
                   </Link>
 
                   <Link
-                    to="/register"
-                    className={`group/register relative flex items-center gap-2 overflow-hidden rounded-full px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-purple-500/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-purple-500/40 ${GRADIENT}`}
+                    to={loginRedirect}
+                    className="group/login flex items-center gap-2 rounded-full bg-brand-gradient px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-iris/40"
                   >
-                    <span className="absolute inset-0 -translate-x-full skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover/register:translate-x-full" />
-                    <UserPlus size={17} className="relative z-10" />
-                    <span className="relative z-10">Register</span>
+                    <LogIn size={16} aria-hidden="true" />
+                    Student Login
                     <ArrowRight
-                      size={16}
-                      className="relative z-10 -ml-1 w-0 opacity-0 transition-all duration-300 group-hover/register:ml-0 group-hover/register:w-4 group-hover/register:opacity-100"
+                      size={15}
+                      className="-ml-1 w-0 opacity-0 transition-all duration-300 group-hover/login:ml-0 group-hover/login:w-4 group-hover/login:opacity-100"
+                      aria-hidden="true"
                     />
                   </Link>
                 </div>
               )}
 
               {/* MOBILE / TABLET MENU BUTTON */}
-              <motion.button
-                whileTap={{ scale: 0.92 }}
+              <button
+                type="button"
                 onClick={() => setIsOpen(true)}
                 aria-label="Open menu"
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 transition-colors hover:border-purple-300 hover:bg-purple-50 hover:text-purple-700 lg:hidden"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-white text-navy transition-colors hover:border-softdeep hover:bg-soft hover:text-brand lg:hidden"
               >
                 <Menu size={21} />
-              </motion.button>
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Scroll progress bar */}
+        {/* Scroll progress bar (logo gradient) */}
         <motion.div
           style={{ scaleX: progress }}
-          className={`absolute bottom-0 left-0 h-[2px] w-full origin-left ${GRADIENT} ${
+          className={`absolute bottom-0 left-0 h-[2px] w-full origin-left bg-brand-gradient transition-opacity duration-300 ${
             scrolled ? "opacity-100" : "opacity-0"
-          } transition-opacity duration-300`}
+          }`}
         />
       </motion.header>
 
@@ -342,76 +347,73 @@ const Header = () => {
       <AnimatePresence>
         {isOpen && (
           <div className="fixed inset-0 z-[9999] flex justify-end">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="absolute inset-0 bg-gray-900/50 backdrop-blur-sm"
+            <div
+              className="absolute inset-0 bg-navy/60 backdrop-blur-sm"
               onClick={() => setIsOpen(false)}
+              aria-hidden="true"
             />
 
             <motion.div
               ref={menuRef}
+              role="dialog"
+              aria-label="Site menu"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 240 }}
-              className="relative flex h-full w-[88vw] max-w-[380px] flex-col overflow-y-auto rounded-l-3xl bg-white shadow-2xl"
+              className="relative flex h-full w-[88vw] max-w-[380px] flex-col overflow-y-auto bg-white shadow-2xl"
             >
               {/* DRAWER HEADER */}
-              <div className="relative overflow-hidden bg-gradient-to-br from-purple-600 via-purple-600 to-[#00C6FF] px-5 pb-6 pt-5 sm:px-6">
-                <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/20 blur-2xl" />
+              <div className="relative overflow-hidden bg-navy px-5 pb-6 pt-5 sm:px-6">
                 <div
-                  className="pointer-events-none absolute inset-0 opacity-20"
-                  style={{
-                    backgroundImage:
-                      "radial-gradient(#ffffff 1px, transparent 1px)",
-                    backgroundSize: "20px 20px",
-                  }}
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-brand/40 blur-3xl"
+                />
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -bottom-10 -left-10 h-36 w-36 rounded-full bg-aqua/20 blur-3xl"
                 />
 
                 <div className="relative flex items-center justify-between">
                   <img
-                    src="/techneest-logo.png"
+                    src="/techneest-logo-dark.png"
                     alt="Techneest Academy"
-                    className="h-16 w-auto brightness-0 invert"
+                    className="h-12 w-auto"
                   />
-                  <motion.button
-                    whileHover={{ rotate: 90 }}
-                    whileTap={{ scale: 0.9 }}
+                  <button
+                    type="button"
                     onClick={() => setIsOpen(false)}
                     aria-label="Close menu"
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 transition-colors hover:bg-white/30"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
                   >
-                    <X size={20} className="text-white" />
-                  </motion.button>
+                    <X size={20} />
+                  </button>
                 </div>
 
                 {/* User card */}
-                <div className="relative mt-5 flex items-center gap-3 rounded-2xl bg-white/15 p-3 ring-1 ring-white/25 backdrop-blur-md">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-base font-bold text-purple-700 shadow-md">
+                <div className="glass relative mt-5 flex items-center gap-3 rounded-2xl p-3">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-base font-bold text-brand shadow-md">
                     {user ? initial : <User size={20} />}
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-bold capitalize text-white">
                       {fullName}
                     </p>
-                    <p className="truncate text-xs text-white/80">
-                      {user ? user.email : "Login to access your courses"}
+                    <p className="truncate text-xs text-white/70">
+                      {user ? user.email : "Sign in to access your courses"}
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* NAV LINKS */}
-              <div className="flex-1 px-3 py-4">
-                <p className="mb-2 px-3 text-[11px] font-bold uppercase tracking-widest text-gray-400">
+              {/* NAV LINKS — icons shown on mobile too */}
+              <nav aria-label="Mobile navigation" className="flex-1 px-3 py-4">
+                <p className="mb-2 px-3 text-[11px] font-bold uppercase tracking-widest text-muted/60">
                   Menu
                 </p>
                 <div className="space-y-1">
-                  {navLinks.map((link, i) => {
-                    const Icon = link.icon;
+                  {NAV_LINKS.map((link, i) => {
+                    const Icon = NAV_ICONS[link.path] || BookOpen;
                     const active = isActive(link.path);
                     return (
                       <motion.div
@@ -430,18 +432,17 @@ const Header = () => {
                             setIsOpen(false);
                             if (link.path === "/") scrollToTop();
                           }}
+                          aria-current={active ? "page" : undefined}
                           className={`flex items-center justify-between rounded-2xl px-3 py-3 transition-all duration-300 ${
                             active
-                              ? `${GRADIENT} text-white shadow-lg shadow-purple-500/30`
-                              : "text-gray-700 hover:bg-purple-50"
+                              ? "bg-brand-gradient text-white shadow-lg shadow-brand/30"
+                              : "text-navy hover:bg-soft"
                           }`}
                         >
                           <div className="flex min-w-0 items-center gap-3">
                             <span
                               className={`flex h-9 w-9 items-center justify-center rounded-xl ${
-                                active
-                                  ? "bg-white/20"
-                                  : "bg-purple-50 text-purple-600"
+                                active ? "bg-white/20" : "bg-soft text-brand"
                               }`}
                             >
                               <Icon size={17} />
@@ -452,23 +453,23 @@ const Header = () => {
                           </div>
                           <ChevronRight
                             size={16}
-                            className={active ? "text-white" : "text-gray-300"}
+                            className={active ? "text-white" : "text-line"}
                           />
                         </Link>
                       </motion.div>
                     );
                   })}
                 </div>
-              </div>
+              </nav>
 
               {/* ACTION BUTTONS */}
-              <div className="sticky bottom-0 border-t border-gray-100 bg-white/95 p-5 backdrop-blur">
+              <div className="sticky bottom-0 border-t border-line bg-white p-5">
                 {!user ? (
                   <div className="grid grid-cols-2 gap-3">
                     <Link
                       to={loginRedirect}
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center justify-center gap-2 rounded-full border border-gray-200 px-4 py-3 text-sm font-semibold text-gray-700 transition-all hover:border-purple-300 hover:text-purple-700"
+                      className="flex items-center justify-center gap-2 rounded-full border border-navy/25 px-4 py-3 text-sm font-semibold text-navy transition-all hover:border-navy hover:bg-navy hover:text-white"
                     >
                       <LogIn size={16} />
                       Login
@@ -476,7 +477,7 @@ const Header = () => {
                     <Link
                       to="/register"
                       onClick={() => setIsOpen(false)}
-                      className={`flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-500/30 ${GRADIENT}`}
+                      className="flex items-center justify-center gap-2 rounded-full bg-brand-gradient px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-brand/30"
                     >
                       <UserPlus size={16} />
                       Register
@@ -487,12 +488,13 @@ const Header = () => {
                     <Link
                       to="/my-courses/profile"
                       onClick={() => setIsOpen(false)}
-                      className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-200 py-3 text-sm font-semibold text-gray-700 transition-all hover:border-purple-300 hover:text-purple-700"
+                      className="flex w-full items-center justify-center gap-2 rounded-full border border-line px-4 py-3 text-sm font-semibold text-navy transition-all hover:border-brand hover:text-brand"
                     >
                       <User size={16} />
                       My Profile
                     </Link>
                     <button
+                      type="button"
                       onClick={handleLogout}
                       className="flex w-full items-center justify-center gap-2 rounded-full bg-red-50 py-3 text-sm font-semibold text-red-600 transition-colors hover:bg-red-100"
                     >
@@ -502,9 +504,9 @@ const Header = () => {
                   </div>
                 )}
 
-                <p className="mt-4 text-center text-xs text-gray-500">
-                  Join <span className="font-bold text-purple-600">2500+</span>{" "}
-                  students already learning
+                <p className="mt-4 text-center text-xs text-muted">
+                  Every course includes a{" "}
+                  <span className="font-bold text-gradient">real internship</span>
                 </p>
               </div>
             </motion.div>

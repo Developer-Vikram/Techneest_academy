@@ -1,5 +1,5 @@
 // src/redux/slices/authSlice.js
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import { api } from "./api";
 
@@ -23,7 +23,7 @@ export const registerUser = createAsyncThunk(
       toast.error(err.response?.data?.message);
       return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
 
 /* ============================================================
@@ -40,7 +40,7 @@ export const verifyOTP = createAsyncThunk(
       toast.error(err.response?.data?.message);
       return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
 
 /* ============================================================
@@ -57,7 +57,7 @@ export const loginUser = createAsyncThunk(
       toast.error(err.response?.data?.message);
       return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
 
 /* ============================================================
@@ -74,7 +74,7 @@ export const logoutUser = createAsyncThunk(
       toast.error("Logout failed.");
       return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
 
 /* ============================================================
@@ -89,7 +89,7 @@ export const getProfile = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
 
 /* ============================================================
@@ -105,7 +105,7 @@ export const completeProfile = createAsyncThunk(
       toast.error(err.response?.data?.message);
       return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
 
 /* ============================================================
@@ -122,7 +122,7 @@ export const forgotPassword = createAsyncThunk(
       toast.error(err.response?.data?.message);
       return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
 
 /* ============================================================
@@ -139,7 +139,7 @@ export const verifyOTPAndReset = createAsyncThunk(
       toast.error(err.response?.data?.message);
       return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
 
 /* ============================================================
@@ -154,15 +154,14 @@ export const changePassword = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
 
 /* ============================================================
    10. GOOGLE LOGIN - Redirect to Google OAuth
 ============================================================ */
 export const googleLogin = () => {
-  window.location.href =
-    `https://maxifyacademy.com/api/auth/google`;
+  window.location.href = `https://techneestacademy.com/api/auth/google`;
 };
 
 /* ============================================================
@@ -180,10 +179,10 @@ export const handleGoogleCallback = createAsyncThunk(
       return res.data;
     } catch (err) {
       return rejectWithValue(
-        err.response?.data?.message || "Google login failed"
+        err.response?.data?.message || "Google login failed",
       );
     }
-  }
+  },
 );
 
 /* ============================================================
@@ -235,10 +234,7 @@ const authSlice = createSlice({
         // 🔥 DIRECT LOGIN
         state.user = action.payload.user;
 
-        localStorage.setItem(
-          "user",
-          JSON.stringify(action.payload.user)
-        );
+        localStorage.setItem("user", JSON.stringify(action.payload.user));
 
         // optional (if backend sends token)
         if (action.payload.token) {
@@ -292,7 +288,7 @@ const authSlice = createSlice({
       .addCase(completeProfile.fulfilled, (state, action) => {
         state.user = action.payload;
         localStorage.setItem("user", JSON.stringify(action.payload));
-      })// GOOGLE CALLBACK
+      }) // GOOGLE CALLBACK
       .addCase(handleGoogleCallback.pending, (state) => {
         state.loading = true;
       })
@@ -303,10 +299,7 @@ const authSlice = createSlice({
 
         state.user = user;
 
-        localStorage.setItem(
-          "user",
-          JSON.stringify(user)
-        );
+        localStorage.setItem("user", JSON.stringify(user));
       })
       .addCase(handleGoogleCallback.rejected, (state) => {
         state.loading = false;

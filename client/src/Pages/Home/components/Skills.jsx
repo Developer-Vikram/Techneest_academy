@@ -105,13 +105,13 @@ const Skills = () => {
             <img
               src={
                 category.image ||
-                "https://maxifyacademy.com/core/resources/views/templates/basic/images/3_2.svg"
+                "https://techneestacademy.com/core/resources/views/templates/basic/images/3_2.svg"
               }
               alt={category.name}
               className="w-full h-full object-cover"
               onError={(e) => {
                 e.currentTarget.src =
-                  "https://maxifyacademy.com/core/resources/views/templates/basic/images/3_2.svg";
+                  "https://techneestacademy.com/core/resources/views/templates/basic/images/3_2.svg";
               }}
             />
           </div>

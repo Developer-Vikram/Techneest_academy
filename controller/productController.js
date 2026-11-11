@@ -3,7 +3,7 @@ const FormData = require("form-data");
 const Product = require("../models/productModel");
 const path = require("path");
 const fs = require("fs");
-const { sendToSubscribers } = require("../utils/sendToSubscribers");  // 👈 ADD THIS
+const { sendToSubscribers } = require("../utils/sendToSubscribers"); // 👈 ADD THIS
 
 // --------------------------------------------------
 // CREATE PRODUCT
@@ -39,7 +39,7 @@ exports.createProduct = async (req, res) => {
       const upload = await axios.post(
         `https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`,
         formData,
-        { headers: formData.getHeaders() }
+        { headers: formData.getHeaders() },
       );
 
       imageUrl = upload.data.data.url;
@@ -97,24 +97,25 @@ exports.createProduct = async (req, res) => {
     await sendToSubscribers({
       subject: "New Digital Product Added!",
       message: `
-        A new digital product has been added on Maxify Academy.<br><br>
+        A new digital product has been added on Techneest Academy.<br><br>
         <strong>${newProduct.title}</strong><br><br>
 
         <a href="${process.env.FRONTEND_URL}/product/${newProduct._id}"
            style="background:#003366;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;">
            View Product
         </a>
-      `
+      `,
     });
 
     return res.status(201).json({
       message: "Product created successfully!",
       product: newProduct,
     });
-
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Server error", error: error.message });
+    return res
+      .status(500)
+      .json({ message: "Server error", error: error.message });
   }
 };
 
@@ -139,7 +140,9 @@ exports.getAllProducts = async (req, res) => {
 // --------------------------------------------------
 exports.getSingleProduct = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id).populate("category_id");
+    const product = await Product.findById(req.params.id).populate(
+      "category_id",
+    );
 
     if (!product) return res.status(404).json({ message: "Product not found" });
 
@@ -173,7 +176,7 @@ exports.updateProduct = async (req, res) => {
       const upload = await axios.post(
         `https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`,
         formData,
-        { headers: formData.getHeaders() }
+        { headers: formData.getHeaders() },
       );
 
       imageUrl = upload.data.data.url;
@@ -215,7 +218,7 @@ exports.updateProduct = async (req, res) => {
         image_file: imageUrl,
         pdf_file: pdfPath,
       },
-      { new: true }
+      { new: true },
     );
 
     res.json({
@@ -226,7 +229,6 @@ exports.updateProduct = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-
 
 exports.deleteProduct = async (req, res) => {
   try {

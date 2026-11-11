@@ -12,7 +12,6 @@ const { sendLoginCredentials } = require("../utils/emailService");
 const createToken = require("../utils/createToken");
 const EmailQueue = require("../models/EmailQueue");
 
-
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
@@ -29,10 +28,7 @@ const generateNumericReferralCode = async () => {
   return code;
 };
 
-
-const normalizeEmail = (email) =>
-  email ? email.trim().toLowerCase() : null;
-
+const normalizeEmail = (email) => (email ? email.trim().toLowerCase() : null);
 
 exports.createOrder = async (req, res) => {
   try {
@@ -82,7 +78,7 @@ exports.createOrder = async (req, res) => {
         httpOnly: true,
         secure: true, // HTTPS required
         sameSite: "None", // 🔥 MUST
-        domain: ".maxifyacademy.com", // 🔥 VERY IMPORTANT
+        domain: ".techneestacademy.com", // 🔥 VERY IMPORTANT
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
     } else {
@@ -113,7 +109,6 @@ exports.createOrder = async (req, res) => {
       amount: order.amount,
       currency: order.currency,
     });
-
   } catch (error) {
     console.error("CREATE ORDER ERROR:", error);
     return res.status(500).json({
@@ -129,11 +124,8 @@ exports.createOrder = async (req, res) => {
 
 exports.verifyPayment = async (req, res) => {
   try {
-    const {
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature,
-    } = req.body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return res.status(400).json({
@@ -160,7 +152,6 @@ exports.verifyPayment = async (req, res) => {
       success: true,
       message: "Payment verified successfully",
     });
-
   } catch (error) {
     console.error("❌ Verify Payment Error:", error);
     return res.status(500).json({
@@ -252,7 +243,7 @@ exports.createPurchase = async (req, res) => {
       const referral_code = await generateNumericReferralCode();
 
       // ✅ Generate referral link
-      const referral_link = `https://maxifyacademy.com/r?ref=${referral_code}`;
+      const referral_link = `https://techneestacademy.com/r?ref=${referral_code}`;
 
       // ✅ Create user
       user = await User.create({
@@ -322,7 +313,6 @@ exports.createPurchase = async (req, res) => {
       message: "Course purchased successfully",
       purchase,
     });
-
   } catch (error) {
     console.error("CREATE PURCHASE ERROR:", error);
     return res.status(500).json({

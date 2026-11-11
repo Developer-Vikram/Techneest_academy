@@ -1,465 +1,189 @@
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { ArrowRight, BriefcaseBusiness, Rocket } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, EffectFade, Pagination } from "swiper/modules";
 
-import {
-  Star,
-  Rocket,
-  Users,
-  CheckCircle,
-  Award,
-  TrendingUp,
-  Clock,
-  Play,
-  Crown,
-  BadgeCheck,
-  Eye,
-} from "lucide-react";
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/pagination";
 
-import { FiArrowRight } from "react-icons/fi";
+import { HERO_SLIDES, HERO_CTAS, HERO_FLOATING_CARDS } from "../../../Data/content";
+import { HERO_SLIDES_IMAGES } from "../../../Data/images";
 
-import AnimatedButton from "../../../Components/AnimatedButton";
+const slides = HERO_SLIDES.map((slide, i) => ({
+  ...slide,
+  image: HERO_SLIDES_IMAGES[i % HERO_SLIDES_IMAGES.length],
+}));
+
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const HeroSection = () => {
-  const words = [
-    "Get You Hired Faster",
-    "Build Your Dream Career",
-    "Grow Your Income Online",
-    "Turn Skills Into Success",
-  ];
+  const swiperRef = useRef(null);
+  const [imgErrors, setImgErrors] = useState({});
 
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-
-  const [displayText, setDisplayText] = useState("");
-
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  // =========================================
-  // TYPING EFFECT
-  // =========================================
-
+  /* Pause auto-play when the hero has keyboard focus */
   useEffect(() => {
-    const currentWord = words[currentWordIndex];
+    const node = swiperRef.current?.el;
+    if (!node) return;
 
-    const typingSpeed = isDeleting ? 50 : 100;
+    const pause = () => swiperRef.current?.swiper?.autoplay?.pause();
+    const resume = () => {
+      if (!prefersReducedMotion()) swiperRef.current?.swiper?.autoplay?.resume();
+    };
 
-    const timeout = setTimeout(() => {
-      setDisplayText((prev) =>
-        isDeleting
-          ? currentWord.substring(0, prev.length - 1)
-          : currentWord.substring(0, prev.length + 1),
-      );
-
-      if (!isDeleting && displayText === currentWord) {
-        setTimeout(() => setIsDeleting(true), 1200);
-      } else if (isDeleting && displayText === "") {
-        setIsDeleting(false);
-
-        setCurrentWordIndex((prev) => (prev + 1) % words.length);
-      }
-    }, typingSpeed);
-
-    return () => clearTimeout(timeout);
-  }, [displayText, isDeleting, currentWordIndex]);
+    node.addEventListener("focusin", pause);
+    node.addEventListener("focusout", resume);
+    return () => {
+      node.removeEventListener("focusin", pause);
+      node.removeEventListener("focusout", resume);
+    };
+  }, []);
 
   return (
-    <section className="w-full bg-gradient-to-br from-white via-blue-50 to-indigo-50 py-8 md:py-6 lg:py-12 overflow-hidden -mt-3">
-      <div className="max-w-[100rem] mx-auto px-5 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-2 lg:flex-row gap-8 lg:gap-12 items-center">
-          {/* ========================================= */}
-          {/* LEFT CONTENT */}
-          {/* ========================================= */}
-
-          <motion.div
-            initial={{
-              opacity: 0,
-              x: -40,
-            }}
-            whileInView={{
-              opacity: 1,
-              x: 0,
-            }}
-            transition={{
-              duration: 0.8,
-            }}
-            viewport={{ once: true }}
-            className="flex-1 space-y-5 md:space-y-6 md:w-[120%]"
-          >
-            {/* TRUST BADGE */}
-            {/* <div className="inline-flex items-center gap-2 bg-white/90 backdrop-blur-sm px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow-sm border border-gray-100 w-fit">
-              <div className="flex gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    size={14}
-                    className="text-yellow-400 fill-yellow-400"
-                  />
-                ))}
-              </div>
-
-              <span className="text-xs md:text-sm font-semibold text-gray-700">
-                Rated 4.9/5 by 2500+ Students
-              </span>
-            </div> */}
-
-            {/* MAIN HEADING */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight">
-              Master In-Demand Skills That <br className="" />
-              <span className="bg-gradient-to-r from-purple-600 to-[#00C6FF] bg-clip-text text-transparent">
-                {displayText}
-
-                <span className="animate-pulse text-purple-600">|</span>
-              </span>
-            </h1>
-
-            {/* DESCRIPTION */}
-            <p className="text-base md:text-lg text-gray-700 leading-relaxed max-w-xl">
-              <span className="font-bold text-gray-900">
-                Learn from industry experts.
-              </span>{" "}
-              Master Web Development, Graphic Design, Digital Marketing, Video
-              Editing, AI Tools, and other high-income skills through practical
-              training and real-world projects.
-            </p>
-
-            {/* FEATURES */}
-            <div className="md:grid grid-cols-2 sm:grid-cols-2 gap-3 hidden max-w-md">
-              {[
-                "Industry-focused learning",
-                "Career support & guidance",
-                "Expert mentor assistance",
-                "Lifetime access & updates",
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-center gap-2">
-                  <CheckCircle
-                    size={16}
-                    className="text-green-500 flex-shrink-0"
-                  />
-
-                  <span className="text-sm text-gray-700">{item}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* MOBILE STATS */}
-            <div className="grid grid-cols-3 gap-3 md:hidden">
-              {[
-                {
-                  value: "5000+",
-                  icon: Users,
-                  label: "Active Students",
-                },
-                {
-                  value: "92%",
-                  icon: Award,
-                  label: "Placement Rate",
-                },
-                {
-                  value: "200+",
-                  icon: Rocket,
-                  label: "Hiring Partners",
-                },
-              ].map((stat, idx) => (
-                <div
-                  key={idx}
-                  className="text-center p-3 bg-white rounded-lg shadow-sm"
-                >
-                  <div className="flex items-center justify-center gap-1 text-xl font-bold text-purple-600">
-                    {stat.value}
-
-                    <stat.icon size={16} />
-                  </div>
-
-                  <p className="text-xs text-gray-600 mt-1">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* CTA BUTTONS */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              {/* REUSABLE BUTTON */}
-              <Link to="/courses">
-                <AnimatedButton
-                  text="Explore Our courses"
-                  className="w-full sm:w-auto px-6 py-4 min-h-[58px] rounded-xl text-lg"
-                />
-              </Link>
-
-              {/* WATCH BUTTON */}
-              <button
-                onClick={() => {
-                  document.getElementById("courses")?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                  });
-                }}
-                className="px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:border-purple-500 hover:text-purple-600 transition-all duration-300 flex items-center justify-center gap-2 group"
-              >
-                <Eye
-                  size={18}
-                  className="group-hover:scale-110 transition-transform"
-                />
-                Popular Course
-              </button>
-            </div>
-
-            {/* SOCIAL PROOF */}
-            <div className="md:pt-5 border-t border-gray-200 space-y-5">
-              {/* STUDENT SECTION */}
-              <div className="md:flex  items-center gap-4 flex-row justify-between hidden">
-                <div className="flex md:flex-row items-center flex-row gap-3">
-                  {/* AVATARS */}
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3, 4].map((i) => (
-                      <img
-                        key={i}
-                        src={`https://i.pravatar.cc/40?img=${i}`}
-                        className="w-9 h-9 rounded-full border-2 border-white shadow-sm"
-                        alt={`Student ${i}`}
-                      />
-                    ))}
-
-                    <div className="w-9 h-9 rounded-full bg-purple-100 border-2 border-white flex items-center justify-center text-xs font-bold text-purple-600">
-                      +50
-                    </div>
-                  </div>
-
-                  {/* TEXT */}
-                  <div className="text-center sm:text-left">
-                    <p className="text-sm font-semibold text-gray-900">
-                      Join 2500+ successful learners
-                    </p>
-
-                    <p className="text-xs text-gray-600">
-                      From beginners to professionals
-                    </p>
-                  </div>
-                </div>
-
-                {/* SALARY HIKE */}
-                <div className="flex items-center justify-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full w-full sm:w-auto">
-                  <TrendingUp size={16} />
-                  <span className="text-sm font-medium">
-                    Avg career growth: 75%
-                  </span>
-                </div>
-              </div>
-
-              {/* STATS */}
-              <div className="grid grid-cols-3 gap-2 sm:gap-3">
-                {[
-                  {
-                    value: "2500+",
-                    icon: Users,
-                    label: "Students",
-                  },
-                  {
-                    value: "92%",
-                    icon: Award,
-                    label: "Completion",
-                  },
-                  {
-                    value: "150+",
-                    icon: Rocket,
-                    label: "Partners",
-                  },
-                ].map((stat, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-white border border-gray-200 rounded-xl p-3 text-center shadow-sm hover:shadow-md transition-all"
-                  >
-                    <div className="flex items-center justify-center gap-1 text-purple-600 font-bold text-lg sm:text-xl">
-                      {stat.value}
-                      <stat.icon size={15} />
-                    </div>
-
-                    <p className="text-[10px] sm:text-xs text-gray-600 mt-1 leading-tight">
-                      {stat.label}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex md:hidden items-center gap-4 flex-col justify-between">
-                <div className="flex md:flex-col items-center flex-row gap-3">
-                  {/* AVATARS */}
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3, 4].map((i) => (
-                      <img
-                        key={i}
-                        src={`https://i.pravatar.cc/40?img=${i}`}
-                        className="w-9 h-9 rounded-full border-2 border-white shadow-sm"
-                        alt={`Student ${i}`}
-                      />
-                    ))}
-
-                    <div className="w-9 h-9 rounded-full bg-purple-100 border-2 border-white flex items-center justify-center text-xs font-bold text-purple-600">
-                      +50
-                    </div>
-                  </div>
-
-                  {/* TEXT */}
-                  <div className="text-center sm:text-left">
-                    <p className="text-sm font-semibold text-gray-900">
-                      Join 2500+ successful learners
-                    </p>
-
-                    <p className="text-xs text-gray-600">
-                      From beginners to professionals
-                    </p>
-                  </div>
-                </div>
-
-                {/* SALARY HIKE */}
-                <div className="flex items-center justify-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full w-full sm:w-auto">
-                  <TrendingUp size={16} />
-                  <span className="text-sm font-medium">
-                    Avg career growth: 75%
-                  </span>
-                </div>
-              </div>
-
-              {/* TRUST BADGES */}
-              <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-center sm:gap-3">
-                {[
-                  {
-                    icon: BadgeCheck,
-                    text: "Industry Recognized",
-                    color: "text-green-500",
-                  },
-                  {
-                    icon: Clock,
-                    text: "Self-Paced Learning",
-                    color: "text-blue-500",
-                  },
-                  {
-                    icon: Crown,
-                    text: "Certification Included",
-                    color: "text-yellow-500",
-                  },
-                  {
-                    icon: BadgeCheck,
-                    text: "Expert Mentors",
-                    color: "text-green-500",
-                  },
-                ].map((badge, idx) => (
-                  <div
-                    key={idx}
-                    className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-gray-200 bg-white p-3 text-center shadow-sm"
-                  >
-                    <badge.icon size={18} className={badge.color} />
-
-                    <span className="text-[11px] sm:text-sm font-medium text-gray-700 leading-tight">
-                      {badge.text}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* ========================================= */}
-          {/* RIGHT CONTENT */}
-          {/* ========================================= */}
-
-          <motion.div
-            initial={{
-              opacity: 0,
-              scale: 0.8,
-            }}
-            whileInView={{
-              opacity: 1,
-              scale: 1,
-            }}
-            transition={{
-              duration: 0.9,
-            }}
-            viewport={{ once: true }}
-            className="flex-1 flex justify-center mt-8 lg:mt-0 hidden md:block ml-[12.5rem]"
-          >
-            <div className="relative w-full max-w-xl">
-              {/* CARD */}
-              <div className="bg-white rounded-2xl shadow-xl p-5">
-                {/* CARD HEADER */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex gap-1.5">
-                    <div className="w-2.5 h-2.5 bg-red-500 rounded-full"></div>
-
-                    <div className="w-2.5 h-2.5 bg-yellow-500 rounded-full"></div>
-
-                    <div className="w-2.5 h-2.5 bg-green-500 rounded-full"></div>
-                  </div>
-
-                  <span className="text-xs text-gray-500">
-                    dashboard.academy
-                  </span>
-                </div>
-
-                {/* IMAGE */}
+    <section aria-label="Highlights" className="relative bg-navy">
+      <Swiper
+        ref={swiperRef}
+        modules={[EffectFade, Autoplay, Pagination]}
+        effect="fade"
+        fadeEffect={{ crossFade: true }}
+        speed={800}
+        loop
+        autoplay={
+          prefersReducedMotion()
+            ? false
+            : { delay: 6000, disableOnInteraction: false, pauseOnMouseEnter: true }
+        }
+        pagination={{
+          clickable: true,
+          bulletClass: "swiper-hero-bullet",
+          bulletActiveClass: "swiper-hero-bullet-active",
+        }}
+        className="hero-swiper"
+      >
+        {slides.map((slide, index) => (
+          <SwiperSlide key={slide.title1}>
+            <div className="relative min-h-[600px] overflow-hidden md:min-h-[680px]">
+              {/* BACKGROUND IMAGE */}
+              {imgErrors[index] ? (
+                <div className="img-fallback absolute inset-0" aria-hidden="true" />
+              ) : (
                 <img
-                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71"
-                  alt="Learning Dashboard Preview"
-                  className="rounded-xl object-cover w-full h-48 sm:h-56 shadow-md"
+                  src={slide.image}
+                  alt=""
+                  aria-hidden="true"
+                  loading={index === 0 ? "eager" : "lazy"}
+                  fetchPriority={index === 0 ? "high" : undefined}
+                  onError={() => setImgErrors((p) => ({ ...p, [index]: true }))}
+                  className="absolute inset-0 h-full w-full object-cover"
                 />
+              )}
 
-                {/* PROGRESS */}
-                <div className="mt-4">
-                  <div className="flex justify-between text-xs text-gray-600 mb-1.5">
-                    <span>Your Progress</span>
+              {/* GRADIENT OVERLAY (navy → indigo) */}
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-gradient-to-r from-navy via-navy/85 to-iris/50"
+              />
+              <div
+                aria-hidden="true"
+                className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-navy to-transparent"
+              />
 
-                    <span className="font-semibold text-purple-600">
-                      68% Complete
-                    </span>
-                  </div>
+              {/* CONTENT */}
+              <div className="relative z-10 mx-auto flex min-h-[600px] max-w-[95rem] items-center px-4 py-20 sm:px-6 md:min-h-[680px] lg:px-8">
+                <div className="max-w-2xl">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-md">
+                    <BriefcaseBusiness size={14} aria-hidden="true" />
+                    {slide.badge}
+                  </span>
 
-                  <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                    <div className="bg-gradient-to-r from-purple-600 to-[#00C6FF] h-full rounded-full w-[68%]"></div>
+                  <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl">
+                    {slide.title1}
+                    <span className="block text-gradient">{slide.title2}</span>
+                  </h1>
+
+                  <p className="mt-5 max-w-xl text-base leading-relaxed text-white/75 md:text-lg">
+                    {slide.text}
+                  </p>
+
+                  <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <Link
+                      to={HERO_CTAS.primary.path}
+                      className="group inline-flex items-center justify-center gap-2 rounded-full bg-brand-gradient px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand/40 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-iris/50"
+                    >
+                      {HERO_CTAS.primary.label}
+                      <ArrowRight
+                        size={16}
+                        aria-hidden="true"
+                        className="transition-transform duration-300 group-hover:translate-x-1"
+                      />
+                    </Link>
+
+                    <Link
+                      to={HERO_CTAS.secondary.path}
+                      className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/40 px-7 py-3.5 text-sm font-bold text-white backdrop-blur-sm transition-all duration-300 hover:border-white hover:bg-white hover:text-navy"
+                    >
+                      {HERO_CTAS.secondary.label}
+                    </Link>
                   </div>
                 </div>
 
-                {/* STATUS */}
-                <div className="mt-4 flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-2">
-                    <Users size={14} className="text-gray-500" />
-
-                    <span className="text-gray-700">
-                      Live Cohort: 124 learners
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-1.5 text-green-600">
-                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-
-                    <span className="text-xs">24 online now</span>
-                  </div>
+                {/* FLOATING GLASS CARDS */}
+                <div className="absolute bottom-24 right-8 z-20 hidden flex-col gap-3 xl:flex xl:max-w-xs">
+                  {HERO_FLOATING_CARDS.map((card, i) => (
+                    <div
+                      key={card.title}
+                      className={`glass flex items-center gap-3 rounded-2xl p-4 shadow-2xl ${
+                        i === 1 ? "translate-x-8" : ""
+                      }`}
+                    >
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-gradient text-white">
+                        {i === 0 ? (
+                          <BriefcaseBusiness size={18} aria-hidden="true" />
+                        ) : (
+                          <Rocket size={18} aria-hidden="true" />
+                        )}
+                      </span>
+                      <span>
+                        <span className="block text-sm font-bold text-white">
+                          {card.title}
+                        </span>
+                        <span className="block text-xs text-white/60">
+                          {card.meta}
+                        </span>
+                      </span>
+                    </div>
+                  ))}
                 </div>
-
-                {/* CTA */}
-                <button className="mt-4 w-full py-3 bg-gradient-to-r from-purple-600 to-[#00C6FF] text-white rounded-xl font-semibold hover:shadow-lg transition-shadow flex items-center justify-center gap-2">
-                  <Play size={16} />
-                  Continue Learning Journey
-                </button>
-              </div>
-
-              {/* FLOATING BADGE */}
-              <div className="absolute -top-3 -left-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1.5 rounded-xl shadow-lg flex items-center gap-1.5">
-                <Star size={14} className="fill-white" />
-
-                <span className="font-bold text-sm">4.9 ★</span>
-              </div>
-
-              {/* PARTNER BADGE */}
-              <div className="absolute -bottom-3 -right-3 bg-white shadow-lg px-3 py-1.5 rounded-xl flex items-center gap-1.5 border border-gray-200">
-                <Rocket size={14} className="text-purple-600" />
-
-                <span className="font-semibold text-gray-800 text-sm">
-                  200+ Partners
-                </span>
               </div>
             </div>
-          </motion.div>
-        </div>
-      </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      {/* Carousel dots + fallback image style */}
+      <style>{`
+        .hero-swiper .swiper-hero-bullet {
+          display: inline-block;
+          width: 10px;
+          height: 10px;
+          border-radius: 9999px;
+          background: rgba(255, 255, 255, 0.35);
+          margin: 0 5px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        .hero-swiper .swiper-hero-bullet-active {
+          width: 30px;
+          background: linear-gradient(90deg, #22D3EE, #1D6BFF);
+        }
+        .hero-swiper .swiper-pagination-bullets {
+          bottom: 22px;
+        }
+      `}</style>
     </section>
   );
 };

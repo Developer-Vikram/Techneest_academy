@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { ExternalLink, Eye, Briefcase, Award, TrendingUp, Star, User, Calendar, Clock, ChevronLeft, ChevronRight } from 'lucide-react'
+import React, { useState, useRef } from 'react'
+import { ExternalLink, Eye, Briefcase, Award, TrendingUp, Star, Calendar, Clock, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Autoplay } from 'swiper/modules'
@@ -149,7 +149,7 @@ const Projects = () => {
         }
     ]
 
-    const [hoveredIndex, setHoveredIndex] = useState(null)
+    const [, setHoveredIndex] = useState(null)
     const swiperRef = useRef(null)
 
     // Function to format days
@@ -187,28 +187,25 @@ const Projects = () => {
     }
 
     return (
-        <section className="w-full bg-gradient-to-b from-gray-50 to-white py-4 md:py-6 overflow-hidden">
-            <div className="max-w-[95rem] mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="w-full overflow-hidden bg-white py-12 md:py-20">
+            <div className="mx-auto max-w-[95rem] px-4 sm:px-6 lg:px-8">
 
                 {/* Section Header */}
-                <div className="text-center max-w-3xl mx-auto mb-2">
-                    {/* Mini badge */}
-                    <div className="inline-flex items-center gap-2 bg-purple-50 px-3 py-1 rounded-full mb-4">
-                        <Briefcase size={14} className="text-purple-600" />
-                        <span className="text-xs font-semibold text-purple-600 uppercase tracking-wide">STUDENT SUCCESS SHOWCASE</span>
-                    </div>
+                <div className="mx-auto mb-10 max-w-3xl text-center">
+                    <span className="inline-flex items-center gap-2 rounded-full bg-soft px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-brand">
+                        <Briefcase size={14} aria-hidden="true" />
+                        Student success showcase
+                    </span>
 
-                    {/* Heading */}
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900">
-                        Projects Created By{' '}
-                        <span className="bg-gradient-to-r from-purple-600 to-[#00C6FF] bg-clip-text text-transparent">
-                            Our Students
-                        </span>
+                    <h2 className="mt-5 text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-4xl md:text-5xl">
+                        Live projects built by{' '}
+                        <span className="text-gradient">our students</span>
                     </h2>
 
-                    <p className="mt-4 text-base md:text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
-                        Explore professional websites designed and developed by Techneest Academy students as part of their hands-on training, real-world projects, and portfolio-building journey.
-                        <span className="block text-sm text-purple-600 font-semibold mt-1">92% students complete first project within 90 days</span>
+                    <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-muted md:text-lg">
+                        Real products, real users, real deployments — designed and
+                        developed by Techneest students during their hands-on
+                        training and portfolio-building journey.
                     </p>
                 </div>
 
@@ -216,19 +213,21 @@ const Projects = () => {
                 <div className="relative px-0 md:px-12">
                     {/* Custom Navigation Buttons */}
                     <button
+                        type="button"
                         onClick={handlePrev}
-                        className="absolute -left-4 md:-left-6 top-1/2 -translate-y-1/2 z-20 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-purple-600 group border border-gray-200 cursor-pointer"
+                        className="absolute -left-4 top-1/2 z-20 -translate-y-1/2 cursor-pointer rounded-full border border-line bg-white p-3 shadow-lg transition-all duration-300 hover:bg-brand-gradient hover:text-white md:-left-6"
                         aria-label="Previous slide"
                     >
-                        <ChevronLeft size={22} className="text-gray-600 group-hover:text-white transition-colors" />
+                        <ChevronLeft size={22} className="text-navy group-hover:text-white transition-colors" />
                     </button>
 
                     <button
+                        type="button"
                         onClick={handleNext}
-                        className="absolute -right-4 md:-right-6 top-1/2 -translate-y-1/2 z-20 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-purple-600 group border border-gray-200 cursor-pointer"
+                        className="absolute -right-4 top-1/2 z-20 -translate-y-1/2 cursor-pointer rounded-full border border-line bg-white p-3 shadow-lg transition-all duration-300 hover:bg-brand-gradient hover:text-white md:-right-6"
                         aria-label="Next slide"
                     >
-                        <ChevronRight size={22} className="text-gray-600 group-hover:text-white transition-colors" />
+                        <ChevronRight size={22} className="text-navy transition-colors" />
                     </button>
 
                     <Swiper
@@ -268,92 +267,97 @@ const Projects = () => {
                         {projects.map((project, index) => (
                             <SwiperSlide key={index}>
                                 <div
-                                    className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full border border-gray-100"
+                                    className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-softdeep hover:shadow-lift"
                                     onMouseEnter={() => setHoveredIndex(index)}
                                     onMouseLeave={() => setHoveredIndex(null)}
                                 >
-                                    {/* Category Badge */}
-                                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg text-xs font-bold text-purple-600 shadow-md">
-                                        {project.category}
-                                    </div>
-
                                     {/* Image Container */}
-                                    <div className="relative overflow-hidden h-56 md:h-52 bg-gray-100 flex-shrink-0">
-                                        <img
-                                            src={project.image}
-                                            alt={project.title}
-                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                            loading="lazy"
-                                        />
+                                    <div className="relative flex-shrink-0 overflow-hidden">
+                                        <div className="aspect-[16/10] w-full bg-soft">
+                                            <img
+                                                src={project.image}
+                                                alt={`${project.title} — built by ${project.student.name}`}
+                                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                                loading="lazy"
+                                                onError={(e) => {
+                                                    e.currentTarget.style.display = 'none'
+                                                }}
+                                            />
+                                        </div>
                                         {/* Gradient Overlay */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+
+                                        {/* Category Badge */}
+                                        <span className="absolute left-4 top-4 z-10 rounded-full bg-white/95 px-3 py-1.5 text-xs font-bold text-navy shadow-md backdrop-blur-sm">
+                                            {project.category}
+                                        </span>
                                     </div>
 
                                     {/* Content */}
-                                    <div className="p-5 flex flex-col flex-grow">
+                                    <div className="flex flex-grow flex-col p-5">
                                         {/* Student Info Section */}
-                                        <div className="flex items-center gap-3 mb-3 pb-3 border-b border-gray-100">
+                                        <div className="mb-3 flex items-center gap-3 border-b border-line pb-3">
                                             <img
                                                 src={project.student.image}
                                                 alt={project.student.name}
-                                                className="w-11 h-11 rounded-full object-cover border-2 border-purple-200 flex-shrink-0"
+                                                className="h-11 w-11 flex-shrink-0 rounded-full border-2 border-softdeep object-cover"
                                                 loading="lazy"
                                             />
-                                            <div className="flex-1 min-w-0">
-                                                <h4 className="font-semibold text-gray-900 text-sm truncate">
+                                            <div className="min-w-0 flex-1">
+                                                <h4 className="truncate text-sm font-bold text-navy">
                                                     {project.student.name}
                                                 </h4>
-                                                <p className="text-xs text-gray-500 truncate">{project.student.role}</p>
+                                                <p className="truncate text-xs text-muted">{project.student.role}</p>
                                             </div>
-                                            <div className="flex gap-0.5 flex-shrink-0">
+                                            <div className="flex flex-shrink-0 gap-0.5" aria-label="Rated 5 out of 5">
                                                 {[...Array(5)].map((_, i) => (
                                                     <Star key={i} size={12} className="fill-yellow-400 text-yellow-400" />
                                                 ))}
                                             </div>
                                         </div>
 
-                                        <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-1">
+                                        <h3 className="mb-2 line-clamp-1 text-lg font-bold text-navy transition-colors group-hover:text-brand">
                                             {project.title}
                                         </h3>
 
-                                        <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                                        <p className="mb-3 line-clamp-2 text-sm leading-relaxed text-muted">
                                             {project.desc}
                                         </p>
 
                                         {/* Tech Stack Tags */}
-                                        <div className="flex flex-wrap gap-1.5 mb-3">
+                                        <div className="mb-3 flex flex-wrap gap-1.5">
                                             {project.tech.slice(0, 4).map((tech, i) => (
-                                                <span key={i} className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full">
+                                                <span key={i} className="rounded-full bg-canvas px-2.5 py-0.5 text-xs font-semibold text-navy">
                                                     {tech}
                                                 </span>
                                             ))}
                                             {project.tech.length > 4 && (
-                                                <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full">
+                                                <span className="rounded-full bg-soft px-2.5 py-0.5 text-xs font-semibold text-brand">
                                                     +{project.tech.length - 4}
                                                 </span>
                                             )}
                                         </div>
 
                                         {/* Result Badge */}
-                                        <div className='flex flex-col mb-3 gap-2'>
-                                            <div className="flex items-center gap-1.5 text-xs font-semibold text-green-600 bg-green-50 px-2 py-1.5 rounded-lg w-fit">
-                                                <TrendingUp size={12} />
+                                        <div className='mb-3 flex flex-col gap-2'>
+                                            <span className="flex w-fit items-center gap-1.5 rounded-lg bg-green-50 px-2 py-1.5 text-xs font-semibold text-green-600">
+                                                <TrendingUp size={12} aria-hidden="true" />
                                                 <span>{project.outcome}</span>
-                                            </div>
+                                            </span>
 
-                                            <div className={`${getCompletionColor(project.student.daysToComplete)} px-2 py-1.5 rounded-lg text-xs font-semibold shadow-sm flex items-center gap-1 w-fit`}>
+                                            <span className={`${getCompletionColor(project.student.daysToComplete)} flex w-fit items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-semibold shadow-sm`}>
                                                 {getCompletionIcon(project.student.daysToComplete)}
                                                 <span>Completed in {formatDays(project.student.daysToComplete)}</span>
-                                            </div>
+                                            </span>
                                         </div>
 
                                         {/* CTA Button */}
                                         <a href={project.link} target="_blank" rel="noopener noreferrer" className="mt-auto">
-                                            <button className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 text-sm group cursor-pointer">
-                                                <Eye size={16} />
+                                            <span className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-navy py-2.5 text-sm font-bold text-white transition-all duration-300 group-hover:bg-brand-gradient">
+                                                <Eye size={16} aria-hidden="true" />
                                                 <span>View Project</span>
-                                                <ExternalLink size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                                            </button>
+                                                <ExternalLink size={14} className="opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true" />
+                                            </span>
                                         </a>
                                     </div>
                                 </div>
@@ -362,49 +366,49 @@ const Projects = () => {
                     </Swiper>
 
                     {/* Custom Pagination */}
-                    <div className="swiper-pagination-custom flex justify-center gap-2 mt-8"></div>
+                    <div className="swiper-pagination-custom mt-8 flex justify-center gap-2"></div>
                 </div>
 
                 {/* Bottom CTA */}
-                <div className="mt-2 text-center">
-                    <p className="text-gray-600 mb-4 text-sm md:text-base">
-                        Want to build projects like these and showcase in your portfolio?
+                <div className="mt-10 text-center">
+                    <p className="mb-4 text-sm text-muted md:text-base">
+                        Want to build projects like these and showcase them in your portfolio?
                     </p>
                     <Link to="/courses">
-                        <button className="inline-flex items-center gap-2 px-8 py-3 bg-white border-2 border-purple-600 text-purple-600 font-semibold rounded-xl hover:bg-purple-600 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg cursor-pointer">
+                        <span className="inline-flex cursor-pointer items-center gap-2 rounded-full border-2 border-navy px-8 py-3 text-sm font-bold text-navy transition-all duration-300 hover:bg-navy hover:text-white hover:shadow-lg">
                             Start Your First Project Today
-                            <ExternalLink size={16} />
-                        </button>
+                            <ExternalLink size={16} aria-hidden="true" />
+                        </span>
                     </Link>
                 </div>
 
             </div>
 
             {/* Custom CSS for Swiper */}
-            <style jsx>{`
+            <style>{`
                 .projects-swiper {
                     padding: 10px 0 !important;
                 }
-                
+
                 .projects-swiper .swiper-slide {
                     height: auto;
                 }
-                
+
                 .swiper-pagination-custom .swiper-pagination-bullet {
                     width: 8px;
                     height: 8px;
-                    background: #d1d5db;
- opacity: 1;
+                    background: #D9E4FF;
+                    opacity: 1;
                     transition: all 0.3s ease;
                     cursor: pointer;
                 }
-                
+
                 .swiper-pagination-custom .swiper-pagination-bullet-active {
-                    background: #7c3aeb;
+                    background: linear-gradient(90deg, #22D3EE, #1D6BFF);
                     width: 24px;
                     border-radius: 4px;
                 }
-                
+
                 @media (max-width: 768px) {
                     .projects-swiper {
                         padding: 5px 0 !important;

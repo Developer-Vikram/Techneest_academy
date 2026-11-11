@@ -5,11 +5,9 @@ const CourseContent = require("../models/CourseContent");
 const crypto = require("crypto");
 const Review = require("../models/reviewModel");
 
-const { sendToSubscribers } = require("../utils/sendToSubscribers"); 
-
+const { sendToSubscribers } = require("../utils/sendToSubscribers");
 
 exports.createCourse = async (req, res) => {
-
   try {
     if (!req.file) {
       return res.status(400).json({ message: "Image file is required" });
@@ -27,7 +25,7 @@ exports.createCourse = async (req, res) => {
         headers: formData.getHeaders(),
         maxContentLength: Infinity,
         maxBodyLength: Infinity,
-      }
+      },
     );
 
     const imageUrl = upload.data.data.url;
@@ -36,15 +34,15 @@ exports.createCourse = async (req, res) => {
     const metaKeyword = Array.isArray(req.body.meta_keyword)
       ? req.body.meta_keyword
       : req.body.meta_keyword
-      ? req.body.meta_keyword.split(",")
-      : [];
+        ? req.body.meta_keyword.split(",")
+        : [];
 
     // ---------- LEARNS ----------
     const learns = Array.isArray(req.body.learns)
       ? req.body.learns
       : req.body.learns
-      ? [req.body.learns]
-      : [];
+        ? [req.body.learns]
+        : [];
 
     // ---------- INCLUDES OBJECT ARRAY ----------
     let includes = [];
@@ -81,23 +79,25 @@ exports.createCourse = async (req, res) => {
     await sendToSubscribers({
       subject: "New Course Launched!",
       message: `
-        A new course has been launched on Maxify Academy.<br><br>
+        A new course has been launched on Techneest Academy.<br><br>
         <strong>${course.title}</strong><br><br>
         
         <a href="${process.env.FRONTEND_URL}/courses"
            style="background:#003366;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;">
            View Course
         </a>
-      `
+      `,
     });
 
     return res.status(200).json({
       message: "Course created successfully",
       course,
     });
-
   } catch (error) {
-    console.error("Course creation error:", error.response?.data || error.message);
+    console.error(
+      "Course creation error:",
+      error.response?.data || error.message,
+    );
 
     return res.status(500).json({
       message: "Course creation failed",
@@ -130,7 +130,7 @@ exports.updateCourse = async (req, res) => {
           headers: formData.getHeaders(),
           maxContentLength: Infinity,
           maxBodyLength: Infinity,
-        }
+        },
       );
 
       imageUrl = upload.data.data.url;
@@ -140,15 +140,15 @@ exports.updateCourse = async (req, res) => {
     const metaKeyword = Array.isArray(req.body.meta_keyword)
       ? req.body.meta_keyword
       : req.body.meta_keyword
-      ? req.body.meta_keyword.split(",")
-      : [];
+        ? req.body.meta_keyword.split(",")
+        : [];
 
     // ---------- LEARNS ----------
     const learns = Array.isArray(req.body.learns)
       ? req.body.learns
       : req.body.learns
-      ? [req.body.learns]
-      : [];
+        ? [req.body.learns]
+        : [];
 
     // ---------- INCLUDES ----------
     let includes = [];
@@ -242,11 +242,11 @@ exports.getAllCourses = async (req, res) => {
     const reviewStats = await Review.aggregate([
       {
         $group: {
-          _id: "$course_id",            
-          review_count: { $sum: 1 },    
-          average_rating: { $avg: "$rating" } 
-        }
-      }
+          _id: "$course_id",
+          review_count: { $sum: 1 },
+          average_rating: { $avg: "$rating" },
+        },
+      },
     ]);
 
     // Map ready for quick lookup
@@ -254,7 +254,7 @@ exports.getAllCourses = async (req, res) => {
     reviewStats.forEach((item) => {
       statsMap[item._id.toString()] = {
         review_count: item.review_count,
-        average_rating: item.average_rating
+        average_rating: item.average_rating,
       };
     });
 
@@ -268,7 +268,7 @@ exports.getAllCourses = async (req, res) => {
       return {
         ...course.toObject(),
         review_count: stat.review_count,
-        average_rating: Number(stat.average_rating?.toFixed(1)) || 0
+        average_rating: Number(stat.average_rating?.toFixed(1)) || 0,
       };
     });
 
@@ -276,7 +276,6 @@ exports.getAllCourses = async (req, res) => {
       success: true,
       courses: finalCourses,
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
@@ -336,11 +335,12 @@ exports.getCourseContentByCourseId = async (req, res) => {
   }
 };
 
-
 exports.getCourseBySlug = async (req, res) => {
   try {
-    const course = await Course.findOne({ slug: req.params.slug })
-      .populate("category_id", "name");
+    const course = await Course.findOne({ slug: req.params.slug }).populate(
+      "category_id",
+      "name",
+    );
 
     if (!course) {
       return res.status(404).json({

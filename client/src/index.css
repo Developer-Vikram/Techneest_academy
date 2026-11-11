@@ -66,21 +66,23 @@ input::-ms-clear {
 }
 
 
-/* Techneest Academy blue/cyan visual theme layer (ported from the reference theme).
+/* Techneest Academy redesign theme layer (palette derived from the logo).
    Intentionally limited to colors, glow, transitions and hover feedback;
    no margin, padding, width, height, grid or flex rules are changed. */
 :root {
-  --techneest-primary: #0072FF;
-  --techneest-primary-dark: #0052CC;
-  --techneest-cyan: #00C6FF;
-  --techneest-soft: #EFF6FF;
+  --techneest-primary: #1D6BFF;
+  --techneest-primary-dark: #155AE0;
+  --techneest-navy: #0A1530;
+  --techneest-cyan: #22D3EE;
+  --techneest-iris: #5B3DF5;
+  --techneest-soft: #EEF3FF;
 }
 
 body {
-  background-color: #ffffff;
+  background-color: #F7F9FF;
 }
 
-/* Subtle ambient blue/cyan glow, matching the reference site's visual language. */
+/* Subtle ambient blue glow matching the redesigned brand. */
 body::before {
   content: "";
   position: fixed;
@@ -88,8 +90,8 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(circle at 4% 8%, rgba(0, 114, 255, 0.045), transparent 28%),
-    radial-gradient(circle at 96% 88%, rgba(0, 198, 255, 0.045), transparent 30%);
+    radial-gradient(circle at 4% 8%, rgba(29, 107, 255, 0.045), transparent 28%),
+    radial-gradient(circle at 96% 88%, rgba(34, 211, 238, 0.04), transparent 30%);
 }
 
 /* Consistent polished interaction feedback without changing element dimensions. */
@@ -105,11 +107,46 @@ button:not(:disabled):hover {
 }
 
 button:focus-visible, a:focus-visible, [role="button"]:focus-visible {
-  outline: 2px solid rgba(0, 114, 255, 0.55);
+  outline: 2px solid rgba(29, 107, 255, 0.55);
   outline-offset: 3px;
 }
 
-/* Blue/cyan hover glow for existing card-like interactive surfaces. */
+/* Soft blue hover glow for existing card-like interactive surfaces. */
 .group:hover {
-  --tw-shadow-color: rgba(0, 114, 255, 0.12);
+  --tw-shadow-color: rgba(29, 107, 255, 0.14);
+}
+
+/* ---------- Redesign helpers ---------- */
+
+/* Cyan → blue → indigo gradient text (logo echo) */
+.text-gradient {
+  background-image: linear-gradient(90deg, #22D3EE 0%, #1D6BFF 50%, #5B3DF5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Glass-style floating card */
+.glass {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+/* Gradient fallback block shown when an image fails to load */
+.img-fallback {
+  background-image: linear-gradient(135deg, #0A1530 0%, #1D6BFF 55%, #22D3EE 100%);
+}
+
+/* Honour reduced-motion preferences site-wide */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

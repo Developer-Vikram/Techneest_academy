@@ -1,15 +1,17 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-  FiAward,
-  FiCheckCircle,
-  FiShield,
-  FiDownload,
-  FiBriefcase,
-} from "react-icons/fi";
+  Award,
+  BadgeCheck,
+  BriefcaseBusiness,
+  Download,
+  ShieldCheck,
+} from "lucide-react";
 
 // APNI PDF YAHAN IMPORT KARO
 import SampleCertificate from "../../../assets/certificatePDF.pdf"; // <-- APNI PDF KA PATH DALO
+import SmartImage from "../../../Components/SmartImage";
+import { CERTIFICATE_IMAGES } from "../../../Data/images";
 
 const CertificateSection = () => {
   // PDF DOWNLOAD FUNCTION
@@ -22,14 +24,44 @@ const CertificateSection = () => {
     document.body.removeChild(link);
   };
 
-  return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white to-[#f5f9ff] py-8 md:py-8">
-      {/* BACKGROUND */}
-      <div className="absolute top-0 left-0 w-72 h-72 bg-blue-100/40 blur-3xl rounded-full" />
-      <div className="absolute bottom-0 right-0 w-72 h-72 bg-cyan-100/40 blur-3xl rounded-full" />
+  const features = [
+    {
+      icon: BadgeCheck,
+      title: "Recognised achievement",
+      description:
+        "An official Techneest certificate that validates your skills, projects and commitment — issued when you complete your course requirements.",
+    },
+    {
+      icon: BriefcaseBusiness,
+      title: "Career & freelance ready",
+      description:
+        "Backed by deployed projects and internship experience, it strengthens your résumé, portfolio and professional profile.",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Proof of practical work",
+      description:
+        "Employers see evidence of hands-on training — code you wrote, products you shipped, reviews you passed.",
+    },
+  ];
 
-      <div className="relative z-10 max-w-[92rem] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 items-center">
+  return (
+    <section
+      className="relative overflow-hidden bg-canvas py-12 md:py-20"
+      aria-label="Certification"
+    >
+      {/* BACKGROUND */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-32 top-0 h-80 w-80 rounded-full bg-soft blur-3xl"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-softdeep/70 blur-3xl"
+      />
+
+      <div className="relative z-10 mx-auto max-w-[95rem] px-4 sm:px-6 lg:px-8">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* LEFT CONTENT */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
@@ -37,101 +69,49 @@ const CertificateSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            {/* BADGE */}
-            <div className="flex justify-center md:justify-start">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#eef4ff] border border-[#dce8ff] mb-6">
-                <FiAward className="text-[#063d67]" size={16} />
+            <span className="inline-flex items-center gap-2 rounded-full border border-softdeep bg-soft px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-brand">
+              <Award size={14} aria-hidden="true" />
+              Certification with substance
+            </span>
 
-                <span className="text-sm font-semibold uppercase md:tracking-[0.15em] tracking-[0.05em] text-[#063d67]">
-                  INDUSTRY-RECOGNIZED CERTIFICATION
-                </span>
-              </div>
-            </div>
-
-            {/* TITLE */}
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-              Get Certified For
-              <span className="block text-[#063d67] mt-2">
-                Your Digital Skills
-              </span>
+            <h2 className="mt-5 text-3xl font-extrabold leading-tight tracking-tight text-navy md:text-4xl">
+              A certificate that means{" "}
+              <span className="text-gradient">you built something</span>
             </h2>
 
-            <div className="relative bg-white rounded-[36px] border border-gray-200 shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden md:hidden mt-5">
-              {/* Certificate Image */}
-              <img
-                src="https://i.ibb.co/wNLSTbRD/certificate-ssss-jpg.jpg"
-                alt="Certificate of Completion"
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            {/* DESC */}
-            <p className="mt-6 text-lg text-gray-600 leading-relaxed">
-              Receive a professional certificate from Techneest Academy that
-              demonstrates your expertise, project experience, and commitment
-              to continuous learning.
+            <p className="mt-4 text-base leading-relaxed text-muted md:text-lg">
+              Every Techneest graduate leaves with more than a PDF — you leave
+              with live projects, reviewed code and an internship record. The
+              certificate is the cover page of that story.
             </p>
 
             {/* FEATURES */}
-            <div className="mt-8 space-y-4">
-              <div className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-2xl bg-green-100 text-green-600 flex items-center justify-center shrink-0">
-                  <FiCheckCircle size={20} />
+            <div className="mt-8 space-y-5">
+              {features.map((feature) => (
+                <div key={feature.title} className="group flex items-start gap-4">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white text-brand shadow-card transition-colors duration-300 group-hover:bg-brand-gradient group-hover:text-white">
+                    <feature.icon size={20} aria-hidden="true" />
+                  </span>
+                  <div>
+                    <h3 className="text-base font-bold text-navy">
+                      {feature.title}
+                    </h3>
+                    <p className="mt-1 text-sm leading-relaxed text-muted">
+                      {feature.description}
+                    </p>
+                  </div>
                 </div>
-
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900">
-                    Recognized Achievement
-                  </h4>
-
-                  <p className="text-gray-600 mt-1">
-                    Validate your knowledge with an official certificate.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                  <FiBriefcase size={20} />
-                </div>
-
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900">
-                    Career & Freelance Ready
-                  </h4>
-
-                  <p className="text-gray-600 mt-1">
-                    Strengthen your resume, portfolio, and professional
-                    profile.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center shrink-0">
-                  <FiShield size={20} />
-                </div>
-
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900">
-                    Trusted Certification
-                  </h4>
-
-                  <p className="text-gray-600 mt-1">
-                    Designed to showcase practical skills gained through
-                    hands-on training.
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
 
             {/* CTA BUTTON - PDF DOWNLOAD */}
-            <button 
+            <button
+              type="button"
               onClick={handleDownloadPDF}
-              className="mt-10 inline-flex items-center gap-3 px-7 py-4 rounded-2xl bg-[#063d67] hover:bg-[#042d4c] text-white font-semibold shadow-lg transition-all duration-300 hover:-translate-y-[2px]"
+              className="mt-9 inline-flex items-center gap-3 rounded-full bg-navy px-7 py-3.5 text-sm font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-gradient hover:shadow-xl"
             >
-              <FiDownload size={20} />
-              Download Certificate (PDF)
+              <Download size={18} aria-hidden="true" />
+              Preview a sample certificate (PDF)
             </button>
           </motion.div>
 
@@ -143,18 +123,37 @@ const CertificateSection = () => {
             transition={{ duration: 0.5 }}
             className="relative flex justify-center"
           >
-            {/* CERTIFICATE CARD */}
             <div className="relative w-full max-w-2xl">
-              {/* SHADOW */}
-              <div className="absolute inset-0 bg-blue-200/20 blur-3xl rounded-[40px]" />
+              {/* glow */}
+              <div
+                aria-hidden="true"
+                className="absolute -inset-4 rounded-[2.5rem] bg-brand-gradient opacity-20 blur-2xl"
+              />
 
-              {/* MAIN CARD */}
-              <div className="relative bg-white rounded-[36px] border border-gray-200 shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden hidden md:block">
-                {/* Certificate Image */}
+              {/* CERTIFICATE PREVIEW CARD */}
+              <div className="relative overflow-hidden rounded-2xl border border-line bg-white p-3 shadow-2xl">
                 <img
                   src="https://i.ibb.co/wNLSTbRD/certificate-ssss-jpg.jpg"
-                  alt="Certificate of Completion"
-                  className="w-full h-full object-cover"
+                  alt="Sample Techneest Academy certificate of completion"
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.outerHTML =
+                      '<div class="img-fallback aspect-[4/3] rounded-xl" role="img" aria-label="Certificate preview"></div>';
+                  }}
+                  className="w-full rounded-xl object-cover"
+                />
+                <span className="absolute right-6 top-6 inline-flex items-center gap-1.5 rounded-full bg-navy/85 px-3 py-1.5 text-[11px] font-bold text-white backdrop-blur-sm">
+                  <Award size={12} aria-hidden="true" /> Sample certificate
+                </span>
+              </div>
+
+              {/* celebration photo */}
+              <div className="relative mt-4 w-44 sm:w-56">
+                <SmartImage
+                  src={CERTIFICATE_IMAGES.celebration}
+                  alt="Student celebrating after completing a course"
+                  ratioClass="aspect-[4/3] rounded-2xl ring-4 ring-white"
+                  className="shadow-xl"
                 />
               </div>
             </div>
