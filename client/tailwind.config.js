@@ -1,15 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
         /* Legacy tokens (still used by the user panel) */
         primary: "#2563EB", // blue
-        accent: "#22C55E",  // green
+        accent: "#22C55E", // green
         dark: "#0F172A",
         light: "#F8FAFC",
 
@@ -20,10 +17,10 @@ export default {
           DEFAULT: "#1D6BFF",
           dark: "#155AE0",
         },
-        aqua: "#22D3EE",     /* cyan accent */
-        iris: "#5B3DF5",     /* indigo / violet */
-        warm: "#FF8A3D",     /* orange accent (sparingly) */
-        magenta: "#D946EF",  /* magenta accent (gradients only) */
+        aqua: "#22D3EE" /* cyan accent */,
+        iris: "#5B3DF5" /* indigo / violet */,
+        warm: "#FF8A3D" /* orange accent (sparingly) */,
+        magenta: "#D946EF" /* magenta accent (gradients only) */,
         soft: "#EEF3FF",
         softdeep: "#D9E4FF",
         line: "#E3E8F5",
@@ -31,7 +28,16 @@ export default {
       },
 
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Arial", "sans-serif"],
+        sans: [
+          '"Plus Jakarta Sans"',
+          "ui-sans-serif",
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "Roboto",
+          "Arial",
+          "sans-serif",
+        ],
       },
 
       boxShadow: {
@@ -41,14 +47,16 @@ export default {
       },
 
       backgroundImage: {
-        "brand-gradient": "linear-gradient(90deg, #22D3EE 0%, #1D6BFF 50%, #5B3DF5 100%)",
-        "brand-gradient-r": "linear-gradient(135deg, #22D3EE 0%, #1D6BFF 55%, #5B3DF5 100%)",
+        "brand-gradient":
+          "linear-gradient(90deg, #22D3EE 0%, #1D6BFF 50%, #5B3DF5 100%)",
+        "brand-gradient-r":
+          "linear-gradient(135deg, #22D3EE 0%, #1D6BFF 55%, #5B3DF5 100%)",
         "warm-gradient": "linear-gradient(90deg, #FF8A3D 0%, #D946EF 100%)",
       },
 
       animation: {
         scroll: "scroll 25s linear infinite",
-        gradientMove: 'gradientMove 4s linear infinite',
+        gradientMove: "gradientMove 4s linear infinite",
       },
 
       keyframes: {
@@ -57,8 +65,8 @@ export default {
           "100%": { transform: "translateX(-50%)" },
         },
         gradientMove: {
-          '0%': { backgroundPosition: '0% 50%' },
-          '100%': { backgroundPosition: '100% 50%' },
+          "0%": { backgroundPosition: "0% 50%" },
+          "100%": { backgroundPosition: "100% 50%" },
         },
       },
     },
